@@ -12,7 +12,7 @@ const handleRequest = frames(async (ctx) => {
     switch (state) {
         case 'home':
             buttons = [
-                <Button action="post" target={{ query: { state: 'images', imageIndex: '0' } }}>Images</Button>,
+                <Button action="post" target={{ query: { state: 'images'} }}>Images</Button>,
                 <Button action="post" target={{ query: { state: 'credits' } }}>Credits</Button>,
                 <Button action="link" target="https://your-website.com">Website</Button>
             ];
@@ -30,10 +30,10 @@ const handleRequest = frames(async (ctx) => {
         case 'stack':
         case 'endorse':
             buttons = [
-                <Button action="post" target={{ query: { state: 'home' } }}>Home</Button>,
-                <Button action="post" target={{ query: { state: 'team' } }}>Team</Button>,
-                <Button action="post" target={{ query: { state: 'stack' } }}>Stack</Button>,
-                <Button action="post" target={{ query: { state: 'endorse' } }}>Endorse</Button>
+                    <Button key="home" action="post" target={{ query: { state: 'home' } }}>Home</Button>,
+                    <Button key="team" action="post" target={{ query: { state: 'team' } }}>Team</Button>,
+                    <Button key="stack" action="post" target={{ query: { state: 'stack' } }}>Stack</Button>,
+                    <Button key="endorse" action="post" target={{ query: { state: 'endorse' } }}>Endorse</Button>
             ];
             break;
         default:

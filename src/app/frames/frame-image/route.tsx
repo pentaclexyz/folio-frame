@@ -19,10 +19,24 @@ export const GET = async (request: NextRequest) => {
             content = <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}><h1>Welcome to Our Project</h1></div>;
             break;
         case 'images':
+            const imagePaths = [
+                '/fileverse/folio-01.png',
+                '/fileverse/folio-02.png',
+                '/fileverse/folio-03.png',
+            ];
+
             content = (
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <h2>Image {imageIndex + 1} of 5</h2>
-                    <p>Image content here</p>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', height: '100%', padding: '20px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-around', width: '100%' }}>
+                        {imagePaths.map((imgPath, index) => (
+                            <img
+                                key={index}
+                                src={`${process.env.NEXT_PUBLIC_HOST}${imgPath}`}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                alt={`Image ${index + 1}`}
+                            />
+                        ))}
+                    </div>
                 </div>
             );
             break;
