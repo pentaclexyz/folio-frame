@@ -13,7 +13,7 @@ const handleRequest = frames(async (ctx) => {
         case 'home':
             buttons = [
                 <Button action="post" target={{ query: { state: 'images', imageIndex: '0' } }}>Images</Button>,
-                <Button action="post" target={{ query: { state: 'team' } }}>Credits</Button>,
+                <Button action="post" target={{ query: { state: 'credits' } }}>Credits</Button>,
                 <Button action="link" target="https://your-website.com">Website</Button>
             ];
             break;
