@@ -28,7 +28,7 @@ export default function RootLayout({
         <head>
             <meta property="og:title" content="Pentafolio"/>
             <meta property="fc:frame:post_url" content="https://folio-frame.vercel.app/"/>
-            <meta property="fc:frame" content="v1"/>
+            <meta property="fc:frame" content="2" />
             <meta property="fc:frame:image" content="https://folio-frame.vercel.app/home-frame.png"/>
             <meta property="og:image" content="https://folio-frame.vercel.app/home-frame.png"/>
         </head>
