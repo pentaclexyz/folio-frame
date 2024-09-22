@@ -12,17 +12,17 @@ const handleRequest = frames(async (ctx) => {
     switch (state) {
         case 'home':
             buttons = [
-                <Button action="post" target={{ query: { state: 'images'} }}>Images</Button>,
-                <Button action="post" target={{ query: { state: 'credits' } }}>Credits</Button>,
-                <Button action="link" target="https://your-website.com">Website</Button>
+                <Button key="images" action="post" target={{ query: { state: 'images'} }}>Images</Button>,
+                <Button key="credits" action="post" target={{ query: { state: 'credits' } }}>Credits</Button>,
+                <Button key="website" action="link" target="https://your-website.com">Website</Button>
             ];
             break;
         case 'images':
             buttons = [
-                <Button action="post" target={{ query: { state: 'home' } }}>Home</Button>,
-                <Button action="post" target={{ query: { state: 'images', imageIndex: Math.max(0, imageIndex - 1).toString() } }}>Previous</Button>,
-                <Button action="post" target={{ query: { state: 'images', imageIndex: Math.min(totalImages - 1, imageIndex + 1).toString() } }}>Next</Button>,
-                <Button action="link" target="https://your-website.com">Website</Button>
+                <Button key="home" action="post" target={{ query: { state: 'home' } }}>Home</Button>,
+                <Button key="prev" action="post" target={{ query: { state: 'images', imageIndex: Math.max(0, imageIndex - 1).toString() } }}>Previous</Button>,
+                <Button key="next" action="post" target={{ query: { state: 'images', imageIndex: Math.min(totalImages - 1, imageIndex + 1).toString() } }}>Next</Button>,
+                <Button key="website" action="link" target="https://your-website.com">Website</Button>
             ];
             break;
         case 'credits':
@@ -30,15 +30,15 @@ const handleRequest = frames(async (ctx) => {
         case 'stack':
         case 'endorse':
             buttons = [
-                    <Button key="home" action="post" target={{ query: { state: 'home' } }}>Home</Button>,
-                    <Button key="team" action="post" target={{ query: { state: 'team' } }}>Team</Button>,
-                    <Button key="stack" action="post" target={{ query: { state: 'stack' } }}>Stack</Button>,
-                    <Button key="endorse" action="post" target={{ query: { state: 'endorse' } }}>Endorse</Button>
+                <Button key="home" action="post" target={{ query: { state: 'home' } }}>Home</Button>,
+                <Button key="team" action="post" target={{ query: { state: 'team' } }}>Team</Button>,
+                <Button key="stack" action="post" target={{ query: { state: 'stack' } }}>Stack</Button>,
+                <Button key="endorse" action="post" target={{ query: { state: 'endorse' } }}>Endorse</Button>
             ];
             break;
         default:
             buttons = [
-                <Button action="post" target={{ query: { state: 'home' } }}>Home</Button>
+                <Button key="home" action="post" target={{ query: { state: 'home' } }}>Home</Button>
             ];
     }
 

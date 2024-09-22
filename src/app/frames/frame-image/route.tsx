@@ -4,7 +4,6 @@ import { ImageResponse } from 'next/og';
 export const GET = async (request: NextRequest) => {
     const searchParams = request.nextUrl.searchParams;
     const state = searchParams.get('state') || 'home';
-    const imageIndex = parseInt(searchParams.get('imageIndex') || '0', 10);
 
     const teamMembers = [
         { role: "Made for", handle: "@fileverse" },
