@@ -24,10 +24,7 @@ const handleRequest = frames(async (ctx) => {
                 <Button key="image3" action="post" target={{ query: { state: 'images', imageIndex: '2' } }}>Leaderboard</Button>,
             ];
             break;
-        case 'credits':
         case 'team':
-        case 'stack':
-        case 'endorse':
             buttons = [
                 <Button key="home" action="post" target={{ query: { state: 'home' } }}>🏠</Button>,
                 <Button key="follow" action="post_redirect" target="https://client.warpcast.com/deeplinks/follow?fid=9893">Follow Fileverse</Button>
