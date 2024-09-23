@@ -6,7 +6,7 @@ type FrameState = 'home' | 'images' | 'credits' | 'team' | 'stack' | 'endorse';
 const handleRequest = frames(async (ctx) => {
     const state = (ctx.searchParams.state as FrameState) || 'home';
     const imageIndex = parseInt(ctx.searchParams.imageIndex || '0', 10);
-    const totalImages = 5;
+    const totalImages = 3; // Changed to 3 as per the new requirement
 
     let buttons;
     switch (state) {
@@ -20,9 +20,9 @@ const handleRequest = frames(async (ctx) => {
         case 'images':
             buttons = [
                 <Button key="home" action="post" target={{ query: { state: 'home' } }}>Home</Button>,
-                <Button key="prev" action="post" target={{ query: { state: 'images', imageIndex: Math.max(0, imageIndex - 1).toString() } }}>Previous</Button>,
-                <Button key="next" action="post" target={{ query: { state: 'images', imageIndex: Math.min(totalImages - 1, imageIndex + 1).toString() } }}>Next</Button>,
-                <Button key="website" action="link" target="https://your-website.com">Website</Button>
+                <Button key="image1" action="post" target={{ query: { state: 'images', imageIndex: '0' } }}>Image 1</Button>,
+                <Button key="image2" action="post" target={{ query: { state: 'images', imageIndex: '1' } }}>Image 2</Button>,
+                <Button key="image3" action="post" target={{ query: { state: 'images', imageIndex: '2' } }}>Image 3</Button>
             ];
             break;
         case 'credits':
