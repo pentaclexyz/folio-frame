@@ -20,7 +20,7 @@ export const GET = async (request: NextRequest) => {
     ];
 
     let content;
-    let imageSrc = `${process.env.NEXT_PUBLIC_HOST}/anything.jpg`;
+    let imageSrc = `${process.env.NEXT_PUBLIC_HOST}/pentacle-folio.jpg`;
 
     switch (state) {
         case 'home':
