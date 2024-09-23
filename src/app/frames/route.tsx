@@ -27,7 +27,7 @@ const handleRequest = frames(async (ctx) => {
         case 'team':
             buttons = [
                 <Button key="home" action="post" target={{ query: { state: 'home' } }}>🏠</Button>,
-                <Button key="follow" action="post_redirect" target="https://client.warpcast.com/deeplinks/follow?fid=9893">Follow Fileverse</Button>
+                <Button key="warpcast" action="link" target="https://warpcast.com/fileverse">Fileversecaster</Button>
             ];
             break;
         default:
