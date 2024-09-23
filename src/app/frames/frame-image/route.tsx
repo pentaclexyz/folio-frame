@@ -20,7 +20,7 @@ export const GET = async (request: NextRequest) => {
     ];
 
     let content;
-    let imageSrc = `${process.env.NEXT_PUBLIC_HOST}/home-frame.png`; // Default image for 'home'
+    let imageSrc = `${process.env.NEXT_PUBLIC_HOST}/home-image.png`;
 
     switch (state) {
         case 'home':
