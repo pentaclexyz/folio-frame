@@ -31,10 +31,7 @@ const handleRequest = frames(async (ctx) => {
         case 'endorse':
             buttons = [
                 <Button key="home" action="post" target={{ query: { state: 'home' } }}>🏠</Button>,
-                // <Button key="team" action="post" target={{ query: { state: 'team' } }}>Team</Button>,
-                <Button key="website" action="link" target="https://warpcast.com/fileverse">fileverse</Button>
-                // <Button key="stack" action="post" target={{ query: { state: 'stack' } }}>Stack</Button>,
-                // <Button key="endorse" action="post" target={{ query: { state: 'endorse' } }}>Endorse</Button>
+                <Button key="follow" action="post_redirect" target="https://client.warpcast.com/deeplinks/follow?fid=9893">Follow Fileverse</Button>
             ];
             break;
         default:

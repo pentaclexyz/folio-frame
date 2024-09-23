@@ -49,20 +49,6 @@ export const GET = async (request: NextRequest) => {
                 />
             );
             break;
-        // case 'credits':
-        //     content = (
-        //         <div style={{
-        //             display: 'flex',
-        //             flexDirection: 'column',
-        //             alignItems: 'center',
-        //             justifyContent: 'center',
-        //             height: '100%'
-        //         }}>
-        //             <h2>Credits</h2>
-        //             <p>Thank you to all contributors!</p>
-        //         </div>
-        //     );
-        //     break;
         case 'team':
             content = (
                 <div style={{
@@ -70,18 +56,32 @@ export const GET = async (request: NextRequest) => {
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    height: '100%'
+                    height: '100%',
+                    width: '100%'
                 }}>
-                    <h2>Our Team</h2>
+                    <h2>Contributors</h2>
                     {teamMembers.map((member, index) => (
                         <div key={index} style={{
                             display: 'flex',
-                            flexDirection: 'column',
                             alignItems: 'center',
-                            marginBottom: '10px'
+                            justifyContent: 'flex-start',
+                            width: '60%',
+                            marginBottom: '10px',
                         }}>
-                            <p style={{margin: 0}}>{member.role}</p>
-                            <p style={{margin: 0}}>{member.handle}</p>
+                            <p style={{
+                                margin: 0,
+                                textAlign: 'left',
+                                fontSize: '32px',
+                                marginRight: '20px',
+                                flex: '1'
+                            }}>{member.role}</p>
+                            <p style={{
+                                margin: 0,
+                                fontWeight: '700',
+                                textAlign: 'left',
+                                fontSize: '32px',
+                                flexBasis: 'auto'
+                            }}>{member.handle}</p>
                         </div>
                     ))}
                 </div>
