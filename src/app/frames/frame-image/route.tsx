@@ -49,20 +49,20 @@ export const GET = async (request: NextRequest) => {
                 />
             );
             break;
-        case 'credits':
-            content = (
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100%'
-                }}>
-                    <h2>Credits</h2>
-                    <p>Thank you to all contributors!</p>
-                </div>
-            );
-            break;
+        // case 'credits':
+        //     content = (
+        //         <div style={{
+        //             display: 'flex',
+        //             flexDirection: 'column',
+        //             alignItems: 'center',
+        //             justifyContent: 'center',
+        //             height: '100%'
+        //         }}>
+        //             <h2>Credits</h2>
+        //             <p>Thank you to all contributors!</p>
+        //         </div>
+        //     );
+        //     break;
         case 'team':
             content = (
                 <div style={{
