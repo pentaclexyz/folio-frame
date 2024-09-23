@@ -20,7 +20,7 @@ const handleRequest = frames(async (ctx) => {
             buttons = [
                 <Button key="home" action="post" target={{ query: { state: 'home' } }}>🏠</Button>,
                 <Button key="image1" action="post" target={{ query: { state: 'images', imageIndex: '0' } }}>Schedule</Button>,
-                <Button key="image2" action="post" target={{ query: { state: 'images', imageIndex: '1' } }}>Onchain love</Button>,
+                <Button key="image2" action="post" target={{ query: { state: 'images', imageIndex: '1' } }}>LOVE</Button>,
                 <Button key="image3" action="post" target={{ query: { state: 'images', imageIndex: '2' } }}>Frame</Button>,
             ];
             break;
