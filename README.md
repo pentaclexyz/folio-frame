@@ -1,3 +1,11 @@
-# Debug
+# get started and debug
 
-`http://localhost:3010/?url=http%3A%2F%2Flocalhost%3A3000%2F`
+```
+$ yarn install
+$ yarn dev
+$ frames
+```
+
+# example
+
+https://warpcast.com/pentacle/0x131dde35
