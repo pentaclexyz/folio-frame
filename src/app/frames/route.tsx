@@ -14,15 +14,15 @@ const handleRequest = frames(async (ctx) => {
             buttons = [
                 <Button key="images" action="post" target={{ query: { state: 'images'} }}>Folio</Button>,
                 <Button key="team" action="post" target={{ query: { state: 'team' } }}>Team</Button>,
-                <Button key="website" action="link" target="https://ethdenver.fileverse.io">www</Button>
+                <Button key="website" action="link" target="https://ethdenver.fileverse.io">View site</Button>
             ];
             break;
         case 'images':
             buttons = [
                 <Button key="home" action="post" target={{ query: { state: 'home' } }}>🏠</Button>,
-                <Button key="image1" action="post" target={{ query: { state: 'images', imageIndex: '0' } }}>Image 1</Button>,
-                <Button key="image2" action="post" target={{ query: { state: 'images', imageIndex: '1' } }}>Image 2</Button>,
-                <Button key="image3" action="post" target={{ query: { state: 'images', imageIndex: '2' } }}>Image 3</Button>
+                <Button key="image1" action="post" target={{ query: { state: 'images', imageIndex: '0' } }}>Schedule</Button>,
+                <Button key="image2" action="post" target={{ query: { state: 'images', imageIndex: '1' } }}>Onchain love</Button>,
+                <Button key="image3" action="post" target={{ query: { state: 'images', imageIndex: '2' } }}>Leaderboard</Button>,
             ];
             break;
         case 'credits':
@@ -32,7 +32,7 @@ const handleRequest = frames(async (ctx) => {
             buttons = [
                 <Button key="home" action="post" target={{ query: { state: 'home' } }}>🏠</Button>,
                 // <Button key="team" action="post" target={{ query: { state: 'team' } }}>Team</Button>,
-                <Button key="website" action="link" target="https://ethdenver.fileverse.io">www</Button>
+                <Button key="website" action="link" target="https://warpcast.com/fileverse">fileverse</Button>
                 // <Button key="stack" action="post" target={{ query: { state: 'stack' } }}>Stack</Button>,
                 // <Button key="endorse" action="post" target={{ query: { state: 'endorse' } }}>Endorse</Button>
             ];
