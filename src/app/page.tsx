@@ -1,24 +1,23 @@
 import { fetchMetadata } from "frames.js/next";
 
 export async function generateMetadata() {
-  return {
-    title: "Pentafolio",
-    // provide a full URL to your /frames endpoint
-    other: await fetchMetadata(
-        new URL(
-            "/frames",
-            process.env.VERCEL_URL
-                ? `https://${process.env.VERCEL_URL}`
-                : "http://localhost:3000"
-        )
-    ),
-  };
+    return {
+        title: "My page",
+        other: {
+            // ...
+            ...(await fetchMetadata(
+                // provide full URL to your /frames endpoint
+                new URL(
+                    "/frames",
+                    process.env.VERCEL_URL
+                        ? "https://folio-frame.vercel.app/"
+                        : "http://localhost:3000"
+                )
+            )),
+        },
+    };
 }
 
-export default function Home() {
-  return (
-    <div className="">
-     hello
-    </div>
-  );
+export default function Page() {
+    return <span>Hello</span>;
 }

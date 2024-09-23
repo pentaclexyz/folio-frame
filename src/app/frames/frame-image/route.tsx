@@ -20,6 +20,8 @@ export const GET = async (request: NextRequest) => {
     ];
 
     let content;
+    let imageSrc = `${process.env.NEXT_PUBLIC_HOST}/home-frame.png`; // Default image for 'home'
+
     switch (state) {
         case 'home':
             content = (
@@ -33,7 +35,7 @@ export const GET = async (request: NextRequest) => {
                     position: 'relative'
                 }}>
                     <img
-                        src={`${process.env.NEXT_PUBLIC_HOST}/home-frame.png`}
+                        src={imageSrc}
                         style={{width: '100%', height: '100%', objectFit: 'contain'}}
                         alt="Fileverse at ETH Denver"
                     />
@@ -41,9 +43,10 @@ export const GET = async (request: NextRequest) => {
             );
             break;
         case 'images':
+            imageSrc = `${process.env.NEXT_PUBLIC_HOST}${imagePaths[imageIndex]}`;
             content = (
                 <img
-                    src={`${process.env.NEXT_PUBLIC_HOST}${imagePaths[imageIndex]}`}
+                    src={imageSrc}
                     style={{width: '100%', height: '100%', objectFit: 'contain'}}
                     alt={`Image ${imageIndex + 1}`}
                 />

@@ -1,7 +1,7 @@
 import { Button } from "frames.js/next";
 import { frames } from "./frames";
 
-type FrameState = 'home' | 'images' | 'credits' | 'team' | 'stack' | 'endorse';
+type FrameState = 'home' | 'images' | 'team';
 
 const handleRequest = frames(async (ctx) => {
     const state = (ctx.searchParams.state as FrameState) || 'home';
