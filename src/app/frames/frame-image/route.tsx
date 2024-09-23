@@ -8,7 +8,7 @@ export const GET = async (request: NextRequest) => {
 
     const teamMembers = [
         {role: "Made for", handle: "@fileverse"},
-        {role: "PM", handle: "@constantin"},
+        {role: "PM", handle: "@miroyato"},
         {role: "UX", handle: "@pentacle"},
         {role: "Dev", handle: "@vijay"},
     ];
