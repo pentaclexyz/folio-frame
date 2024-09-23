@@ -6,10 +6,9 @@ export async function generateMetadata() {
         other: {
             // ...
             ...(await fetchMetadata(
-                // provide full URL to your /frames endpoint
                 new URL(
                     "/frames",
-                    process.env.VERCEL_URL
+                    process.env.NEXT_PUBLIC_HOST // no idea why this is like this but it works now
                         ? "https://folio-frame.vercel.app/"
                         : "http://localhost:3000"
                 )
