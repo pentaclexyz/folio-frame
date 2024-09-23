@@ -14,3 +14,8 @@ https://warpcast.com/pentacle/0x131dde35
 ### warpcast debugger
 
 https://warpcast.com/~/developers/frames?url=https%3A%2F%2Ffolio-frames.vercel.app%2F
+
+
+### todo
+
+fix src/app/page hardcoded env variable
