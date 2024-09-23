@@ -4,7 +4,6 @@ export async function generateMetadata() {
     return {
         title: "My page",
         other: {
-            // ...
             ...(await fetchMetadata(
                 new URL(
                     "/frames",
