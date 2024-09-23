@@ -6,7 +6,6 @@ type FrameState = 'home' | 'images' | 'credits' | 'team' | 'stack' | 'endorse';
 const handleRequest = frames(async (ctx) => {
     const state = (ctx.searchParams.state as FrameState) || 'home';
     const imageIndex = parseInt(ctx.searchParams.imageIndex || '0', 10);
-    const totalImages = 3; // Changed to 3 as per the new requirement
 
     let buttons;
     switch (state) {
