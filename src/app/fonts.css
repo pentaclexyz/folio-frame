@@ -1,0 +1,17 @@
+@font-face {
+    font-family: 'factor-a-regular';
+    src: url('/fonts/FactorAMono-Regular') format('truetype');
+}
+
+.factor-a-regular {
+    font-family: factor-a-regular, arial, sans-serif;
+}
+
+@font-face {
+    font-family: 'factor-a-bold';
+    src: url('/fonts/FactorAMono-Bold') format('truetype');
+}
+
+.factor-a-bold {
+    font-family: factor-a-bold, arial, sans-serif;
+}

@@ -76,7 +76,8 @@ export const GET = async (request: NextRequest) => {
                                 textAlign: 'left',
                                 fontSize: '32px',
                                 marginRight: '20px',
-                                flex: '1'
+                                flex: '1',
+                                fontFamily: 'factor-a-regular'
                             }}>{member.role}</p>
                             <p style={{
                                 margin: 0,

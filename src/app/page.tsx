@@ -1,17 +1,13 @@
 import { fetchMetadata } from "frames.js/next";
 
 export async function generateMetadata() {
+    const baseUrl = process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000';
+    const metadataUrl = new URL('/frames', baseUrl);
+
     return {
         title: "folio frame",
         other: {
-            ...(await fetchMetadata(
-                new URL(
-                    "/frames",
-                    process.env.NEXT_PUBLIC_HOST // no idea why this is like this but it works now
-                        ? "https://folio-frames.vercel.app/"
-                        : "http://localhost:3000"
-                )
-            )),
+            ...(await fetchMetadata(metadataUrl)),
         },
     };
 }
