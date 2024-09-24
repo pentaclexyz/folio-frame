@@ -126,7 +126,6 @@ export const GET = async (request: NextRequest) => {
         path.join(process.cwd(), "public/fonts", "FactorAMono-Bold.otf")
     );
 
-    // Explicitly type the options object
     const options: ImageResponse['options'] = {
         width: 1200,
         height: 628,
