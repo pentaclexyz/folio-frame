@@ -1,5 +1,7 @@
 import {NextRequest} from 'next/server';
 import {ImageResponse} from 'next/og';
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
 
 export const GET = async (request: NextRequest) => {
     const searchParams = request.nextUrl.searchParams;
@@ -62,7 +64,11 @@ export const GET = async (request: NextRequest) => {
                     height: '100%',
                     width: '100%'
                 }}>
-                    <h2>Contributors</h2>
+                    <h2 style={{
+                        fontFamily: 'factor-a-bold',
+                        paddingBottom: '12px',
+                        margin: 0
+                    }}>Contributors</h2>
                     {teamMembers.map((member, index) => (
                         <div key={index} style={{
                             display: 'flex',
@@ -71,20 +77,23 @@ export const GET = async (request: NextRequest) => {
                             width: '60%',
                             marginBottom: '10px',
                         }}>
+
                             <p style={{
                                 margin: 0,
                                 textAlign: 'left',
                                 fontSize: '32px',
                                 marginRight: '20px',
                                 flex: '1',
-                                fontFamily: 'factor-a-regular'
-                            }}>{member.role}</p>
+                                fontFamily: 'factor-a'
+                            }}>{member.role}
+                            </p>
                             <p style={{
                                 margin: 0,
-                                fontWeight: '700',
+                                fontWeight: 700,
                                 textAlign: 'left',
                                 fontSize: '32px',
-                                flexBasis: 'auto'
+                                flexBasis: 'auto',
+                                fontFamily: 'factor-a'
                             }}>{member.handle}</p>
                         </div>
                     ))}
@@ -100,15 +109,42 @@ export const GET = async (request: NextRequest) => {
                     justifyContent: 'center',
                     height: '100%'
                 }}>
-                    <h2>Our Tech Stack</h2>
-                    <p>Details coming soon...</p>
+                    <h2 style={{fontFamily: 'factor-a-bold'}}>Our Tech Stack</h2>
+                    <p style={{fontFamily: 'factor-a'}}>Details coming soon...</p>
                 </div>
             );
             break;
         default:
             content = <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%'}}>
-                <h1>Welcome</h1></div>;
+                <h1 style={{fontFamily: 'factor-a'}}>Welcome</h1></div>;
     }
+
+    const factorARegularFont = await fs.readFile(
+        path.join(process.cwd(), "public/fonts", "FactorAMono-Regular.otf")
+    );
+    const factorABoldFont = await fs.readFile(
+        path.join(process.cwd(), "public/fonts", "FactorAMono-Bold.otf")
+    );
+
+    // Explicitly type the options object
+    const options: ImageResponse['options'] = {
+        width: 1200,
+        height: 628,
+        fonts: [
+            {
+                name: "factor-a",
+                data: factorARegularFont,
+                style: 'normal',
+                weight: 400
+            },
+            {
+                name: "factor-a-bold",
+                data: factorABoldFont,
+                style: 'normal',
+                weight: 700
+            }
+        ]
+    };
 
     return new ImageResponse(
         (
@@ -126,9 +162,6 @@ export const GET = async (request: NextRequest) => {
                 {content}
             </div>
         ),
-        {
-            width: 1200,
-            height: 628,
-        }
+        options
     );
 };
