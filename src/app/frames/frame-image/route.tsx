@@ -261,21 +261,23 @@ export const GET = async (request: NextRequest) => {
         path.join(process.cwd(), "public/fonts", "FactorAMono-Bold.otf")
     );
 
-    const options: ImageResponse['options'] = {
+    type Weight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
+
+    const options = {
         width: 1200,
         height: 628,
         fonts: [
             {
                 name: "factor-a",
                 data: factorARegularFont,
-                style: 'normal',
-                weight: 400
+                style: 'normal' as const,
+                weight: 400 as Weight
             },
             {
                 name: "factor-a-bold",
                 data: factorABoldFont,
-                style: 'normal',
-                weight: 700
+                style: 'normal' as const,
+                weight: 700 as Weight
             }
         ]
     };
