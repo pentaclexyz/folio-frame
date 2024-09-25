@@ -55,7 +55,7 @@ export const GET = async (request: NextRequest) => {
     const farcasterHandle = `@${portfolioOwnerInfo.username}`;
     const projectClient = clientHandle;
     const projectTitle = "ETH Denver 2024";
-    const projectDate = "September 2024";
+    const projectDate = "June 2024";
 
     const teamMembers = [
         {role: "Client", handle: "fileverse"},
