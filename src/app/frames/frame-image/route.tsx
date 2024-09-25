@@ -3,21 +3,39 @@ import { ImageResponse } from 'next/og';
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 
-async function fetchFarcasterUserInfo(fid: number): Promise<{ pfp_url: string, username: string }> {
+async function fetchFarcasterUserInfoByHandle(handle: string): Promise<{ pfp_url: string, fid: number, username: string }> {
     try {
-        const response = await fetch(`https://api.neynar.com/v2/farcaster/user/bulk?fids=${fid}`, {
+        const userResponse = await fetch(`https://api.neynar.com/v1/farcaster/user-by-username?username=${handle.replace('@', '')}`, {
             headers: {
                 'api_key': process.env.NEYNAR_API_KEY || ''
             }
         });
-        const data = await response.json();
+        const userData = await userResponse.json();
+        const fid = userData.result.user.fid;
+
+        return fetchFarcasterUserInfoByFid(fid);
+    } catch (error) {
+        console.error('Error fetching Farcaster user info by handle:', error);
+        return { pfp_url: '', fid: 0, username: '' };
+    }
+}
+
+async function fetchFarcasterUserInfoByFid(fid: number): Promise<{ pfp_url: string, fid: number, username: string }> {
+    try {
+        const infoResponse = await fetch(`https://api.neynar.com/v2/farcaster/user/bulk?fids=${fid}`, {
+            headers: {
+                'api_key': process.env.NEYNAR_API_KEY || ''
+            }
+        });
+        const infoData = await infoResponse.json();
         return {
-            pfp_url: data.users[0].pfp_url,
-            username: data.users[0].username
+            pfp_url: infoData.users[0].pfp_url,
+            fid: fid,
+            username: infoData.users[0].username
         };
     } catch (error) {
-        console.error('Error fetching Farcaster user info:', error);
-        return { pfp_url: '', username: '' };
+        console.error('Error fetching Farcaster user info by FID:', error);
+        return { pfp_url: '', fid: 0, username: '' };
     }
 }
 
@@ -25,27 +43,30 @@ export const GET = async (request: NextRequest) => {
     const searchParams = request.nextUrl.searchParams;
     const state = searchParams.get('state') || 'home';
     const imageIndex = searchParams.get('imageIndex') ? parseInt(searchParams.get('imageIndex') as string) : 0;
-
-    // Dynamic content for home state
+    const backgroundColor = searchParams.get('bgcolor') || '#FDD9E8';
     const portfolioOwnerFid = 1068;
-    const clientFid = 243117;
+    const clientHandle = "@fileverse";
 
     const [portfolioOwnerInfo, clientInfo] = await Promise.all([
-        fetchFarcasterUserInfo(portfolioOwnerFid),
-        fetchFarcasterUserInfo(clientFid)
+        fetchFarcasterUserInfoByFid(portfolioOwnerFid),
+        fetchFarcasterUserInfoByHandle(clientHandle)
     ]);
 
-    const farcasterHandle = `${portfolioOwnerInfo.username}`;
-    const projectClient = `${clientInfo.username}`;
+    const farcasterHandle = `@${portfolioOwnerInfo.username}`;
+    const projectClient = clientHandle;
     const projectTitle = "ETH Denver 2024";
-    const projectDate = "June 2024";
+    const projectDate = "September 2024";
 
     const teamMembers = [
-        {role: "Made for", handle: "fileverse"},
+        {role: "Client", handle: "fileverse"},
         {role: "PM", handle: "miroyato"},
         {role: "UX", handle: "pentacle"},
         {role: "Dev", handle: "vijay"},
     ];
+
+    const teamMemberInfo = await Promise.all(
+        teamMembers.map(member => fetchFarcasterUserInfoByHandle(member.handle))
+    );
 
     const imagePaths = [
         '/fileverse/folio-01.png',
@@ -193,42 +214,65 @@ export const GET = async (request: NextRequest) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     height: '100%',
-                    width: '100%'
+                    width: '100%',
                 }}>
                     <div style={{
                         fontSize: '48px',
                         fontFamily: 'factor-a-bold',
                         marginBottom: '80px',
-                        display: 'flex'
                     }}>
-                        Contributors
+                        Team
                     </div>
-                    {teamMembers.map((member, index) => (
-                        <div key={index} style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'flex-start',
-                            width: '60%',
-                            marginBottom: '10px',
-                        }}>
-                            <p style={{
-                                margin: 0,
-                                textAlign: 'left',
-                                fontSize: '32px',
-                                marginRight: '20px',
-                                flex: '1',
-                                fontFamily: 'factor-a'
-                            }}>{member.role}</p>
-                            <p style={{
-                                margin: 0,
-                                fontWeight: 700,
-                                textAlign: 'left',
-                                fontSize: '32px',
-                                flexBasis: 'auto',
-                                fontFamily: 'factor-a'
-                            }}>{member.handle}</p>
-                        </div>
-                    ))}
+                    <div style={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        justifyContent: 'space-between',
+                        width: '900px',
+                    }}>
+                        {teamMembers.map((member, index) => (
+                            <div key={index} style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                width: '380px',
+                                marginBottom: '60px',
+                            }}>
+                                <div style={{
+                                    width: '80px',
+                                    height: '80px',
+                                    borderRadius: '50%',
+                                    overflow: 'hidden',
+                                    marginRight: '30px',
+                                    display: 'flex',
+                                }}>
+                                    <img
+                                        src={teamMemberInfo[index].pfp_url}
+                                        alt={`${member.handle} profile`}
+                                        style={{
+                                            width: '100%',
+                                            height: '100%',
+                                            objectFit: 'cover'
+                                        }}
+                                    />
+                                </div>
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}>
+                                    <p style={{
+                                        paddingBottom: '5px',
+                                        margin: '0',
+                                        fontSize: '32px',
+                                        fontFamily: 'factor-a-bold',
+                                    }}>{member.handle}</p>
+                                    <p style={{
+                                        margin: 0,
+                                        fontSize: '24px',
+                                        fontFamily: 'factor-a',
+                                    }}>{member.role}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             );
             break;
@@ -291,7 +335,7 @@ export const GET = async (request: NextRequest) => {
                 justifyContent: 'center',
                 width: '100%',
                 height: '100%',
-                backgroundColor: '#FDD9E8',
+                backgroundColor: backgroundColor,
                 fontSize: 24,
                 fontWeight: 600
             }}>
