@@ -47,7 +47,7 @@ export const GET = async (request: NextRequest) => {
     const portfolioOwnerFid = 1068;
     const clientHandle = "@fileverse";
 
-    const [portfolioOwnerInfo, clientInfo] = await Promise.all([
+    const [portfolioOwnerInfo] = await Promise.all([
         fetchFarcasterUserInfoByFid(portfolioOwnerFid),
         fetchFarcasterUserInfoByHandle(clientHandle)
     ]);
