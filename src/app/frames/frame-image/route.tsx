@@ -195,10 +195,14 @@ export const GET = async (request: NextRequest) => {
                     height: '100%',
                     width: '100%'
                 }}>
-                    <h2 style={{
+                    <div style={{
+                        fontSize: '48px',
                         fontFamily: 'factor-a-bold',
-                        marginBottom: '40px'
-                    }}>Contributors</h2>
+                        marginBottom: '80px',
+                        display: 'flex'
+                    }}>
+                        Contributors
+                    </div>
                     {teamMembers.map((member, index) => (
                         <div key={index} style={{
                             display: 'flex',
