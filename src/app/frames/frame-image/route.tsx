@@ -60,7 +60,7 @@ export const GET = async (request: NextRequest) => {
     const teamMembers = [
         {role: "Client", handle: "fileverse"},
         {role: "PM", handle: "miroyato"},
-        {role: "UX", handle: "pentacle"},
+        {role: "Product design", handle: "pentacle"},
         {role: "Dev", handle: "vijay"},
     ];
 
