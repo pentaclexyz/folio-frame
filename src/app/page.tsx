@@ -13,5 +13,5 @@ export async function generateMetadata() {
 }
 
 export default function Page() {
-    return <span>Hello</span>;
+    return <span className={"bg-pink-300 p-40 flex items-center justify-items-center"}>Hello</span>;
 }
