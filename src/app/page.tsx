@@ -21,7 +21,10 @@ export default function Page() {
             <div className={"w-[400px]"}>
                 <div className={""}><img src={"images/pop-char-small.png"} alt={"pop"}/></div>
             </div>
-            <div className={"w-96 pr-12"}><img src={"images/proof-of-project-soon.svg"} alt={"pop"}/></div>
+            <div className={"pr-12"}>
+                <div className={"w-96"}><img src={"images/proof-of-project-soon.svg"} alt={"pop"}/></div>
+                {/*<p className={"text-right"}>farcaster</p>*/}
+            </div>
         </div>
     </main>;
 }
