@@ -37,7 +37,7 @@ const handleRequest = frames(async (ctx) => {
     }
 
     return {
-        image: `${process.env.NEXT_PUBLIC_HOST}/frames/frame-image?state=${state}&imageIndex=${imageIndex}`,
+        image: `${process.env.NEXT_PUBLIC_HOST}/frames/fileverse/frame-image?state=${state}&imageIndex=${imageIndex}`,
         buttons: buttons,
     };
 });

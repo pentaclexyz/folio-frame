@@ -2,7 +2,7 @@ import {fetchMetadata} from "frames.js/next";
 
 export async function generateMetadata() {
     const baseUrl = process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000';
-    const metadataUrl = new URL('/frames', baseUrl);
+    const metadataUrl = new URL('/frames/fileverse', baseUrl);
 
     return {
         title: "POP – proof of project",

@@ -3,7 +3,7 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 
 export const frames = createFrames({
-    basePath: "/frames",
+    basePath: "/frames/fileverse",
     debug: process.env.NODE_ENV === "development",
     imageRenderingOptions: async () => {
         const factorARegularFont = fs.readFile(
