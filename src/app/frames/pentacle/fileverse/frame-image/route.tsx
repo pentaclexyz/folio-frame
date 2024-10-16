@@ -3,6 +3,7 @@ import { ImageResponse } from 'next/og';
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import { fetchFarcasterUserInfoByHandle, fetchFarcasterUserInfoByFid } from '../../farcasterApi';
+import { fetchTeamMemberInfo } from '../../teamUtils';
 
 export const GET = async (request: NextRequest) => {
     const searchParams = request.nextUrl.searchParams;
@@ -29,9 +30,7 @@ export const GET = async (request: NextRequest) => {
         {role: "Dev", handle: "vijay"},
     ];
 
-    const teamMemberInfo = await Promise.all(
-        teamMembers.map(member => fetchFarcasterUserInfoByHandle(member.handle))
-    );
+    const teamMemberInfo = await fetchTeamMemberInfo(teamMembers);
 
     const imagePaths = [
         '/fileverse/folio-01.png',
