@@ -1,7 +1,5 @@
 import { NextRequest } from 'next/server';
 import { ImageResponse } from 'next/og';
-import * as fs from "node:fs/promises";
-import * as path from "node:path";
 import { fetchFarcasterUserInfoByHandle, fetchFarcasterUserInfoByFid } from '../../farcasterApi';
 import { fetchTeamMemberInfo } from '../../teamUtils';
 import { getContentForState } from './contentRenderer';
@@ -32,9 +30,14 @@ export const GET = async (request: NextRequest) => {
         { role: "Dev", handle: "vijay" }
     ];
 
+    const imagePaths = [
+        '/fileverse/folio-01.png',
+        '/fileverse/folio-02.png',
+        '/fileverse/folio-03.png',
+    ];
+
     const teamMemberInfo = await fetchTeamMemberInfo(teamMembers);
 
-    // Pass the additional variables to the content renderer
     const content = getContentForState(
         state,
         portfolioOwnerInfo,
@@ -43,7 +46,8 @@ export const GET = async (request: NextRequest) => {
         farcasterHandle,
         projectClient,
         projectTitle,
-        projectDate
+        projectDate,
+        imagePaths
     );
 
     const fonts = await loadFonts();

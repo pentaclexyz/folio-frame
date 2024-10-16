@@ -8,13 +8,9 @@ export function getContentForState(
     farcasterHandle: string,
     projectClient: string,
     projectTitle: string,
-    projectDate: string
+    projectDate: string,
+    imagePaths: string[]
 ) {
-    const imagePaths = [
-        '/fileverse/folio-01.png',
-        '/fileverse/folio-02.png',
-        '/fileverse/folio-03.png',
-    ];
 
     switch (state) {
         case 'home':

@@ -15,13 +15,13 @@ export async function loadFonts() {
             name: "factor-a",
             data: factorARegularFont,
             style: 'normal' as const,
-            weight: 400 as const,  // Directly specify the weight
+            weight: 400 as const,
         },
         {
             name: "factor-a-bold",
             data: factorABoldFont,
             style: 'normal' as const,
-            weight: 700 as const,  // Directly specify the weight
+            weight: 700 as const,
         }
     ];
 }
