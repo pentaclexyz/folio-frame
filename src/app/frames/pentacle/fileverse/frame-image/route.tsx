@@ -5,6 +5,10 @@ import { fetchTeamMemberInfo } from '../../teamUtils';
 import { getContentForState } from './contentRenderer';
 import { loadFonts } from './fontLoader';
 
+export const websiteUrl = "ethdenver.fileverse.io";
+export const warpcastHandle = "fileverse";
+export const imageLabels = ['Schedule', 'LOVE', 'Frame'];
+
 export const GET = async (request: NextRequest) => {
     const searchParams = request.nextUrl.searchParams;
     const state = searchParams.get('state') || 'home';

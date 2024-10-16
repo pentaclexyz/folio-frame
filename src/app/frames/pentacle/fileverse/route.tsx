@@ -1,5 +1,6 @@
 import { Button } from "frames.js/next";
 import { frames } from "./frames";
+import { websiteUrl, warpcastHandle, imageLabels } from './frame-image/route';
 
 type FrameState = 'home' | 'images' | 'team';
 
@@ -7,9 +8,6 @@ const handleRequest = frames(async (ctx) => {
     const state = (ctx.searchParams.state as FrameState) || 'home';
     const imageIndex = parseInt(ctx.searchParams.imageIndex || '0', 10);
 
-    const websiteUrl = "ethdenver.fileverse.io";
-    const warpcastHandle = "fileverse";
-    const imageLabels = ['Schedule', 'LOVE', 'Frame'];
     const imageUrl = `${process.env.NEXT_PUBLIC_HOST}/frames/pentacle/fileverse/frame-image?state=${state}&imageIndex=${imageIndex}`;
 
     let buttons;
@@ -32,7 +30,7 @@ const handleRequest = frames(async (ctx) => {
         case 'team':
             buttons = [
                 <Button key="home" action="post" target={{ query: { state: 'home' } }}>🏠</Button>,
-                <Button key="warpcast" action="link" target={`https://warpcast.com/${warpcastHandle}`}>@fileverse</Button>
+                <Button key="warpcast" action="link" target={`https://warpcast.com/${warpcastHandle}`}>{warpcastHandle}</Button>
             ];
             break;
         default:
