@@ -5,6 +5,7 @@ import * as path from "node:path";
 import { fetchFarcasterUserInfoByHandle, fetchFarcasterUserInfoByFid } from '../../farcasterApi';
 import { fetchTeamMemberInfo } from '../../teamUtils';
 import { getContentForState } from './contentRenderer';
+import { loadFonts } from './fontLoader';
 
 export const GET = async (request: NextRequest) => {
     const searchParams = request.nextUrl.searchParams;
@@ -45,32 +46,12 @@ export const GET = async (request: NextRequest) => {
         projectDate
     );
 
-    const factorARegularFont = await fs.readFile(
-        path.join(process.cwd(), "public/fonts", "FactorAMono-Regular.otf")
-    );
-    const factorABoldFont = await fs.readFile(
-        path.join(process.cwd(), "public/fonts", "FactorAMono-Bold.otf")
-    );
-
-    type Weight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
+    const fonts = await loadFonts();
 
     const options = {
         width: 1200,
         height: 628,
-        fonts: [
-            {
-                name: "factor-a",
-                data: factorARegularFont,
-                style: 'normal' as const,
-                weight: 400 as Weight
-            },
-            {
-                name: "factor-a-bold",
-                data: factorABoldFont,
-                style: 'normal' as const,
-                weight: 700 as Weight
-            }
-        ]
+        fonts
     };
 
     return new ImageResponse(
