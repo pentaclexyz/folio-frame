@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
 import { ImageResponse } from 'next/og';
-import { fetchFarcasterUserInfoByHandle, fetchFarcasterUserInfoByFid } from '../../farcasterApi';
-import { fetchTeamMemberInfo } from '../../teamUtils';
-import { getContentForState } from './contentRenderer';
-import { loadFonts } from './fontLoader';
+import { fetchFarcasterUserInfoByHandle, fetchFarcasterUserInfoByFid } from '../../../utils/farcasterApi';
+import { fetchTeamMemberInfo } from '../../../utils/teamUtils';
+import { getContentForState } from '../contentRenderer';
+import { loadFonts } from '../fontLoader';
 
 export const websiteUrl = "ethdenver.fileverse.io";
 export const warpcastHandle = "fileverse";
