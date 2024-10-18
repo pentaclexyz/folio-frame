@@ -4,6 +4,8 @@ import { fetchFarcasterUserInfoByHandle, fetchFarcasterUserInfoByFid } from '../
 import { fetchTeamMemberInfo } from '../../teamUtils';
 import { getContentForState } from './contentRenderer';
 import { loadFonts } from './fontLoader';
+import {serverClient} from "@/app/_trpc/server-client";
+import invariant from "tiny-invariant";
 
 export const websiteUrl = "ethdenver.fileverse.io";
 export const warpcastHandle = "fileverse";
@@ -22,10 +24,15 @@ export const GET = async (request: NextRequest) => {
         fetchFarcasterUserInfoByHandle(clientHandle)
     ]);
 
+    const projects =  await serverClient.getAllProjectsByFarcasterHandle(portfolioOwnerInfo.username);
+
+    //FIXME: Allow user to scroll through projects?
+    const firstProject = projects[0]
+
     const farcasterHandle = `@${portfolioOwnerInfo.username}`;
-    const projectClient = clientHandle;
-    const projectTitle = "ETH Denver 2024";
-    const projectDate = "June 2024";
+    const projectClient = firstProject.clients.clientWarpcastHandle;
+    const projectTitle = firstProject.projectName;
+    const projectDate = firstProject.projectDate;
 
     const teamMembers = [
         { role: "Client", handle: "fileverse" },
@@ -41,6 +48,9 @@ export const GET = async (request: NextRequest) => {
     ];
 
     const teamMemberInfo = await fetchTeamMemberInfo(teamMembers);
+
+    invariant(projectClient);
+    invariant(projectDate);
 
     const content = getContentForState(
         state,
