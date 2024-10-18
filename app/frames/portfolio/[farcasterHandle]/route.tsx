@@ -78,7 +78,11 @@ const handler = async (
 
     if (projectIndex > 0) {
       buttons.push(
-        <Button key="prev" action="post" target={{ query: { projectIndex: projectIndex - 1 } }}>
+        <Button
+          key="prev"
+          action="post"
+          target={{ pathname: '/portfolio/pentacle', query: { projectIndex: projectIndex - 1 } }}
+        >
           ⬅️
         </Button>,
       );
@@ -86,7 +90,11 @@ const handler = async (
 
     if (totalUserProjects > projectIndex + 1) {
       buttons.push(
-        <Button key="next" action="post" target={{ query: { projectIndex: projectIndex + 1 } }}>
+        <Button
+          key="next"
+          action="post"
+          target={{ pathname: '/portfolio/pentacle', query: { projectIndex: projectIndex + 1 } }}
+        >
           ➡️
         </Button>,
       );
