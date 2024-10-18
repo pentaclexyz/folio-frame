@@ -8,7 +8,7 @@ const handleRequest = frames(async (ctx) => {
     const state = (ctx.searchParams.state as FrameState) || 'home';
     const imageIndex = parseInt(ctx.searchParams.imageIndex || '0', 10);
 
-    const baseUrl = process.env.NEXT_PUBLIC_HOST || 'https://folio-frame-production.up.railway.app';
+    const baseUrl = process.env.NEXT_PUBLIC_HOST;
     const imageUrl = `${baseUrl}/frames/pentacle/fileverse/frame-image?state=${state}&imageIndex=${imageIndex}`;
 
     let buttons;
