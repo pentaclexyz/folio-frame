@@ -1,22 +1,45 @@
 import { db } from '@lib/db/db';
-import { users, projects, clients } from '@lib/db/drizzle/schema';
-import { eq, getTableColumns, sql } from 'drizzle-orm';
+import { users, projects, clients, images } from '@lib/db/drizzle/schema';
+import { count, eq, getTableColumns } from 'drizzle-orm';
 
 export async function getProjectById(projectId: number) {
   return db.select().from(projects).where(eq(projects.projectId, projectId));
+}
+
+export async function getTotalUserProjects(userId: number) {
+  return db.select({ count: count() }).from(projects).where(eq(projects.userId, userId));
+}
+
+export async function getUserByFarcasterHandle(farcasterHandle: string) {
+  return db.query.users.findFirst({
+    where: (users, { eq }) => eq(users.userWarpcastHandle, farcasterHandle),
+  });
 }
 
 // export async function getAllProjectsByFarcasterHandle(farcasterHandle: string) {
 //     return db.query.projects.findFirst({where: (users, {eq}) => eq(users, farcasterHandle)})
 // }
 
-export async function getAllProjectsByFarcasterHandle(farcasterHandle: string) {
+export async function getAllProjectsByFarcasterHandle({
+  offset,
+  userFarcasterHandle,
+}: {
+  offset: number;
+  userFarcasterHandle: string;
+}) {
   return db
-    .select({ ...getTableColumns(projects), clients: { ...getTableColumns(clients) } })
+    .select({
+      ...getTableColumns(projects),
+      clients: { ...getTableColumns(clients) },
+      images: { ...getTableColumns(images) },
+    })
     .from(projects)
     .leftJoin(users, eq(projects.userId, users.userId))
     .innerJoin(clients, eq(projects.clientId, clients.clientId))
-    .where(eq(users.userWarpcastHandle, farcasterHandle));
+    .innerJoin(images, eq(projects.projectId, images.projectId))
+    .where(eq(users.userWarpcastHandle, userFarcasterHandle))
+    .limit(1)
+    .offset(offset);
 }
 
 // export async function getAllProjectsByFarcaster(farcasterHandle: string) {

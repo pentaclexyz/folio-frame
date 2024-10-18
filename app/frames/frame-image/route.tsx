@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { ImageResponse } from 'next/og';
-import { fetchFarcasterUserInfoByHandle, fetchFarcasterUserInfoByFid } from '../../farcasterApi';
-import { fetchTeamMemberInfo } from '../../teamUtils';
+import { fetchFarcasterUserInfoByHandle, fetchFarcasterUserInfoByFid } from '../farcasterApi';
+import { fetchTeamMemberInfo } from '../teamUtils';
 import { getContentForState } from './contentRenderer';
 import { loadFonts } from './fontLoader';
 import { serverClient } from '@/app/_trpc/server-client';
@@ -26,7 +26,10 @@ export const GET = async (request: NextRequest) => {
     fetchFarcasterUserInfoByHandle(clientHandle),
   ]);
 
-  const projects = await serverClient.getAllProjectsByFarcasterHandle(portfolioOwnerInfo.username);
+  const projects = await serverClient.getAllProjectsByFarcasterHandle({
+    userFarcasterHandle: portfolioOwnerInfo.username,
+    offset: 0,
+  });
 
   //FIXME: Allow user to scroll through projects?
   const firstProject = projects[0];
