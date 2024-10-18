@@ -1,9 +1,6 @@
 import { publicProcedure, router } from './trpc';
-import {
-  getProjectById,
-    getAllProjectsByFarcasterHandle
-} from '@lib/db/queries/pop';
-import { z } from "zod";
+import { getProjectById, getAllProjectsByFarcasterHandle } from '@lib/db/queries/pop';
+import { z } from 'zod';
 
 export const appRouter = router({
   getProjectById: publicProcedure.input(z.number()).query(async (opts) => {

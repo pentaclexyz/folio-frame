@@ -1,6 +1,6 @@
 import { db } from '@lib/db/db';
 import { users, projects, clients } from '@lib/db/drizzle/schema';
-import { eq, getTableColumns, sql} from 'drizzle-orm';
+import { eq, getTableColumns, sql } from 'drizzle-orm';
 
 export async function getProjectById(projectId: number) {
   return db.select().from(projects).where(eq(projects.projectId, projectId));
@@ -11,7 +11,12 @@ export async function getProjectById(projectId: number) {
 // }
 
 export async function getAllProjectsByFarcasterHandle(farcasterHandle: string) {
-    return db.select({...getTableColumns(projects), clients: {...getTableColumns(clients)}}).from(projects).leftJoin(users, eq(projects.userId, users.userId)).innerJoin(clients, eq(projects.clientId, clients.clientId)).where(eq(users.userWarpcastHandle, farcasterHandle));
+  return db
+    .select({ ...getTableColumns(projects), clients: { ...getTableColumns(clients) } })
+    .from(projects)
+    .leftJoin(users, eq(projects.userId, users.userId))
+    .innerJoin(clients, eq(projects.clientId, clients.clientId))
+    .where(eq(users.userWarpcastHandle, farcasterHandle));
 }
 
 // export async function getAllProjectsByFarcaster(farcasterHandle: string) {

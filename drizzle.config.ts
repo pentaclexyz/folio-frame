@@ -21,6 +21,6 @@ export default defineConfig({
     host: dbConfig.DB_HOST,
     port: dbConfig.DB_PORT,
     database: dbConfig.DB_NAME,
-    ssl: dbConfig.DB_HOST !== 'localhost'
+    ssl: dbConfig.DB_HOST !== 'localhost',
   },
 });
