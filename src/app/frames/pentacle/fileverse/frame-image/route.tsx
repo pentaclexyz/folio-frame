@@ -1,13 +1,11 @@
+// src/app/frames/pentacle/fileverse/frame-image/route.tsx
+
 import { NextRequest } from 'next/server';
 import { ImageResponse } from 'next/og';
 import { fetchFarcasterUserInfoByHandle, fetchFarcasterUserInfoByFid } from '../../farcasterApi';
 import { fetchTeamMemberInfo } from '../../teamUtils';
 import { getContentForState } from './contentRenderer';
 import { loadFonts } from './fontLoader';
-
-export const websiteUrl = "ethdenver.fileverse.io";
-export const warpcastHandle = "fileverse";
-export const imageLabels = ['Schedule', 'LOVE', 'Frame'];
 
 export const GET = async (request: NextRequest) => {
     const searchParams = request.nextUrl.searchParams;

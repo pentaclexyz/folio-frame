@@ -1,6 +1,6 @@
 import { Button } from "frames.js/next";
 import { frames } from "./frames";
-import { websiteUrl, warpcastHandle, imageLabels } from './frame-image/route';
+import { websiteUrl, warpcastHandle, imageLabels } from './constants';
 
 type FrameState = 'home' | 'images' | 'team';
 
