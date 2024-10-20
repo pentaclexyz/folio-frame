@@ -1,5 +1,7 @@
 // contentRenderer.ts
 
+import {id} from "postcss-selector-parser";
+
 export function getContentForState(
     state: string,
     portfolioOwnerInfo: { pfp_url: string, username: string },
@@ -12,10 +14,15 @@ export function getContentForState(
     imagePaths: string[]
 ) {
 
+    console.log({ portfolioOwnerInfo, teamMemberInfo, imagePaths, farcasterHandle, projectClient, projectTitle, projectDate });
+    console.log(`http://localhost:3000/${projectClient}/${imagePaths[imageIndex]}.png`);
+    console.log('Farcaster Handle:', farcasterHandle);
+
+
     switch (state) {
         case 'home':
             return (
-                <div style={{
+                <div id='home' style={{
                     display: 'flex',
                     flexDirection: 'column',
                     width: '100%',
@@ -38,7 +45,8 @@ export function getContentForState(
                             display: 'flex'
                         }}>
                             <img
-                                src={portfolioOwnerInfo.pfp_url}
+                                // src={portfolioOwnerInfo.pfp_url}
+                                src="https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/7bf93ea6-db04-4ac3-3373-4795beb01b00/original"
                                 alt="Profile Picture"
                                 style={{
                                     width: '100%',
@@ -52,7 +60,8 @@ export function getContentForState(
                             fontFamily: 'factor-a-bold',
                             display: 'flex'
                         }}>
-                            {farcasterHandle} folio
+                            {/*{farcasterHandle} folio*/}
+                            hello
                         </div>
                     </div>
 
@@ -81,7 +90,8 @@ export function getContentForState(
                                 marginBottom: '10px',
                                 display: 'flex'
                             }}>
-                                {projectClient}
+                                {/*{projectClient}*/}
+                                client
                             </div>
                             <div style={{
                                 fontSize: '48px',
@@ -89,14 +99,17 @@ export function getContentForState(
                                 marginBottom: '40px',
                                 display: 'flex'
                             }}>
-                                {projectTitle}
+                                {/*{projectTitle}*/}
+                                title
                             </div>
+
                             <div style={{
                                 fontSize: '24px',
                                 fontFamily: 'factor-a',
                                 display: 'flex'
                             }}>
-                                {projectDate}
+                                {/*{projectDate}*/}
+                                date
                             </div>
                         </div>
                         <div style={{
@@ -129,13 +142,21 @@ export function getContentForState(
                     </div>
                 </div>
             );
+
         case 'images':
             return (
-                <img
-                    src={`${process.env.NEXT_PUBLIC_HOST}${imagePaths[imageIndex]}`}
-                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                    alt={`Image ${imageIndex + 1}`}
-                />
+                imagePaths?.[imageIndex] ? (
+                    <img
+                        src={`${process.env.NEXT_PUBLIC_HOST}/${imagePaths[imageIndex]}.png`}
+                        alt={`Image ${imageIndex + 1}`}
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                    />
+
+                ) : (
+                    <div style={{ textAlign: 'center', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <p>No image available</p>
+                    </div>
+                )
             );
         case 'team':
             return (
@@ -160,65 +181,69 @@ export function getContentForState(
                         justifyContent: 'space-between',
                         width: '900px',
                     }}>
-                        {teamMemberInfo.map((member, index) => (
-                            <div key={index} style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                width: '380px',
-                                marginBottom: '60px',
-                            }}>
-                                <div style={{
-                                    width: '80px',
-                                    height: '80px',
-                                    borderRadius: '50%',
-                                    overflow: 'hidden',
-                                    marginRight: '30px',
+                        {teamMemberInfo?.length > 0 ? (
+                            teamMemberInfo.map((member, index) => (
+                                <div key={index} style={{
                                     display: 'flex',
+                                    alignItems: 'center',
+                                    width: '380px',
+                                    marginBottom: '60px',
                                 }}>
-                                    <img
-                                        src={member.pfp_url}
-                                        alt={`${member.username} profile`}
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            objectFit: 'cover'
-                                        }}
-                                    />
+                                    <div style={{
+                                        width: '80px',
+                                        height: '80px',
+                                        borderRadius: '50%',
+                                        overflow: 'hidden',
+                                        marginRight: '30px',
+                                        display: 'flex',
+                                    }}>
+                                        <img
+                                            src={member.pfp_url}
+                                            alt={`${member.username} profile`}
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'cover'
+                                            }}
+                                        />
+                                    </div>
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                    }}>
+                                        <p style={{
+                                            paddingBottom: '5px',
+                                            margin: '0',
+                                            fontSize: '32px',
+                                            fontFamily: 'factor-a-bold',
+                                        }}>{member.username}</p>
+                                    </div>
                                 </div>
-                                <div style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                }}>
-                                    <p style={{
-                                        paddingBottom: '5px',
-                                        margin: '0',
-                                        fontSize: '32px',
-                                        fontFamily: 'factor-a-bold',
-                                    }}>{member.username}</p>
-                                </div>
-                            </div>
-                        ))}
+                            ))
+                        ) : (
+                            <p>No team members available</p>
+                        )}
                     </div>
                 </div>
             );
-        case 'stack':
-            return (
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100%'
-                }}>
-                    <h2 style={{ fontFamily: 'factor-a-bold' }}>Our Tech Stack</h2>
-                    <p style={{ fontFamily: 'factor-a' }}>Details coming soon...</p>
-                </div>
-            );
-        default:
-            return (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                    <h1 style={{ fontFamily: 'factor-a' }}>Welcome</h1>
-                </div>
-            );
+        // case 'stack':
+        //     return (
+        //         <div style={{
+        //             display: 'flex',
+        //             flexDirection: 'column',
+        //             alignItems: 'center',
+        //             justifyContent: 'center',
+        //             height: '100%'
+        //         }}>
+        //             <h2 style={{ fontFamily: 'factor-a-bold' }}>Our Tech Stack</h2>
+        //             <p style={{ fontFamily: 'factor-a' }}>Details coming soon...</p>
+        //         </div>
+        //     );
+        // default:
+        //     return (
+        //         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+        //             <h1 style={{ fontFamily: 'factor-a' }}>Welcome</h1>
+        //         </div>
+        //     );
     }
 }
