@@ -1,0 +1,54 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Project {
+  id         Int      @id @default(autoincrement())
+  name       String
+  date       DateTime
+  client     Client   @relation(fields: [clientId], references: [id])
+  clientId   Int
+  images     Image[]
+  teamMembers TeamMemberProject[]
+}
+
+model Client {
+  id                Int      @id @default(autoincrement())
+  warpcastHandle    String
+  projects          Project[]
+}
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  path      String
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId Int
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  fid       Int
+  name      String
+  teamMemberProjects TeamMemberProject[]
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String
+  teamMemberProjects TeamMemberProject[]
+}
+
+model TeamMemberProject {
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId Int
+  role      Role     @relation(fields: [roleId], references: [id])
+  roleId    Int
+}

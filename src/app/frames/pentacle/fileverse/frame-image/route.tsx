@@ -16,17 +16,17 @@ export const GET = async (request: NextRequest) => {
 
     const res = await db.query(
         `SELECT tm.user_fid, c.client_warpcast_handle, p.project_name, p.project_date, i.image_path,
-       tm.user_name as team_member_handle, r.role_name as team_member_role
-FROM projects p
-JOIN users u ON u.user_id = p.user_id  -- Project owner
-JOIN clients c ON c.client_id = p.client_id
-JOIN images i ON i.project_id = p.project_id
-JOIN team_members_projects tmp ON tmp.project_id = p.project_id
-JOIN users tm ON tm.user_id = tmp.team_member_id  -- Team members
-JOIN roles r ON r.role_id = tmp.role_id
-WHERE p.project_name = $1 AND c.client_warpcast_handle = $2;
+        tm.user_name as team_member_handle, r.role_name as team_member_role
+        FROM projects p
+        JOIN users u ON u.user_id = p.user_id  -- Project owner
+        JOIN clients c ON c.client_id = p.client_id
+        JOIN images i ON i.project_id = p.project_id
+        JOIN team_members_projects tmp ON tmp.project_id = p.project_id
+        JOIN users tm ON tm.user_id = tmp.team_member_id  -- Team members
+        JOIN roles r ON r.role_id = tmp.role_id
+        WHERE p.project_name = $1 AND c.client_warpcast_handle = $2;
 `,
-        ['ETH Denver', 'fileverse']
+        ['ETH Denver 2024', 'fileverse']
     );
 
 // Handle the query result
