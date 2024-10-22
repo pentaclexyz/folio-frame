@@ -1,11 +1,9 @@
 import { Button } from "frames.js/next";
 import { frames } from "./frames";
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/app/utils';  // Correct Prisma import
 import { fetchMetadata } from "frames.js/next";
 
 type FrameState = 'home' | 'images' | 'team';
-
-const prisma = new PrismaClient();
 
 // Metadata generation function for the wildcat project
 export async function generateMetadata() {
@@ -24,6 +22,7 @@ const handleRequest = frames(async (ctx) => {
     const state = (ctx.searchParams.state as FrameState) || 'home';
     const imageIndex = parseInt(ctx.searchParams.imageIndex || '0', 10);
 
+    // Use the singleton Prisma client to query your database
     const projectData = await prisma.projects.findFirst({
         where: {
             project_name: 'wildcat',
