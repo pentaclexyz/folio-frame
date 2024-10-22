@@ -111,7 +111,7 @@ export function getContentForState(
                                 fontFamily: 'factor-a',
                                 display: 'flex'
                             }}>
-                                {/*{projectDate}*/}
+                                {projectDate}
                             </div>
                         </div>
                         <div style={{
@@ -131,7 +131,7 @@ export function getContentForState(
                                 overflow: 'hidden'
                             }}>
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_HOST}/pentacle-folio.jpg`}
+                                    src={`${process.env.NEXT_PUBLIC_HOST}/${projectName}/feature.jpg`}  // Dynamic path
                                     alt="Project Image"
                                     style={{
                                         width: '100%',

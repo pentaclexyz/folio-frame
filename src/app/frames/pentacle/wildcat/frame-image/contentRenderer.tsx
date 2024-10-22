@@ -9,20 +9,22 @@ export function getContentForState(
     projectClient: string,
     projectName: string,
     projectDate: string,
-    imagePaths: string[]
+    imagePaths: string[],
+backgroundColor: string[]
 ) {
 
     console.log({
         portfolioOwnerInfo,
         teamMemberInfo,
         imagePaths,
+        backgroundColor,
         farcasterHandle,
         projectClient,
         projectName,
         projectDate
     });
-    console.log(`http://localhost:3000/${projectClient}/${imagePaths[imageIndex]}.png`);
-    console.log('Farcaster Handle:', farcasterHandle);
+    // console.log(`http://localhost:3000/${projectClient}/${imagePaths[imageIndex]}.png`);
+    // console.log('Farcaster Handle:', farcasterHandle);
 
 
     switch (state) {
@@ -131,7 +133,7 @@ export function getContentForState(
                                 overflow: 'hidden'
                             }}>
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_HOST}/pentacle-folio.jpg`}
+                                    src={`${process.env.NEXT_PUBLIC_HOST}/${projectName}/feature.jpg`}  // Dynamic path
                                     alt="Project Image"
                                     style={{
                                         width: '100%',
