@@ -1,19 +1,21 @@
 import { PrismaClient } from '@prisma/client';
 import { headers } from 'next/headers';
 
+// Singleton pattern for Prisma client
 let prisma: PrismaClient;
 
 if (process.env.NODE_ENV === 'production') {
     prisma = new PrismaClient();
 } else {
-    // Prevent multiple Prisma instances in development
     if (!global.prisma) {
         global.prisma = new PrismaClient();
     }
     prisma = global.prisma;
 }
 
-export { prisma }; // Export Prisma client
+export { prisma };
+
+// Utility functions
 
 export function currentURL(pathname: string): URL {
     try {

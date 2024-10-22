@@ -1,6 +1,6 @@
 import { Button } from "frames.js/next";
 import { frames } from "./frames";
-import { prisma } from '@/app/utils';  // Correct Prisma import
+import { prisma } from '@/app/utils';
 import { fetchMetadata } from "frames.js/next";
 
 type FrameState = 'home' | 'images' | 'team';

@@ -1,10 +1,10 @@
 "use client";  // This component is now a client component
 
-import { useSearchParams } from 'next/navigation';
+// import { useSearchParams } from 'next/navigation';
 
 export default function Page() {
-    const searchParams = useSearchParams();
-    const project = searchParams.get('project') || 'wildcat';
+    // const searchParams = useSearchParams();
+    // const project = searchParams.get('project') || 'wildcat';
 
     return (
         <main className={"bg-[#f3eeda] h-screen flex flex-col justify-between"}>

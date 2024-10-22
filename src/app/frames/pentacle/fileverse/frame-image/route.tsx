@@ -1,12 +1,10 @@
 import { NextRequest } from 'next/server';
 import { ImageResponse } from 'next/og';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/app/utils';
 import { fetchFarcasterUserInfoByHandle, fetchFarcasterUserInfoByFid } from '../../farcasterApi';
 import { fetchTeamMemberInfo } from '../../teamUtils';
 import { getContentForState } from './contentRenderer';
 import { loadFonts } from './fontLoader';
-
-const prisma = new PrismaClient();
 
 export const GET = async (request: NextRequest) => {
     const searchParams = request.nextUrl.searchParams;
