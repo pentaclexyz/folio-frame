@@ -48,7 +48,7 @@ model users {
   user_name             String
   user_warpcast_handle  String?
   user_x_handle         String?
-  user_fid              Int? // Add this field
+  user_fid              Int // Make sure this exists
   team_members_projects team_members_projects[]
   projects              projects[]
 }
