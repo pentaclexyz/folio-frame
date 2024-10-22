@@ -1,12 +1,12 @@
-// src/app/frames/pentacle/fileverse/frame-image/route.tsx
-
 import { NextRequest } from 'next/server';
 import { ImageResponse } from 'next/og';
-import db from '../../../../db';  // Import your db.js file
+import { PrismaClient } from '@prisma/client';
 import { fetchFarcasterUserInfoByHandle, fetchFarcasterUserInfoByFid } from '../../farcasterApi';
 import { fetchTeamMemberInfo } from '../../teamUtils';
 import { getContentForState } from './contentRenderer';
 import { loadFonts } from './fontLoader';
+
+const prisma = new PrismaClient();
 
 export const GET = async (request: NextRequest) => {
     const searchParams = request.nextUrl.searchParams;
@@ -14,35 +14,52 @@ export const GET = async (request: NextRequest) => {
     const imageIndex = searchParams.get('imageIndex') ? parseInt(searchParams.get('imageIndex') as string) : 0;
     const backgroundColor = searchParams.get('bgcolor') || '#FDD9E8';
 
-    const res = await db.query(
-        `SELECT tm.user_fid, c.client_warpcast_handle, p.project_name, p.project_date, i.image_path,
-        tm.user_name as team_member_handle, r.role_name as team_member_role
-        FROM projects p
-        JOIN users u ON u.user_id = p.user_id  -- Project owner
-        JOIN clients c ON c.client_id = p.client_id
-        JOIN images i ON i.project_id = p.project_id
-        JOIN team_members_projects tmp ON tmp.project_id = p.project_id
-        JOIN users tm ON tm.user_id = tmp.team_member_id  -- Team members
-        JOIN roles r ON r.role_id = tmp.role_id
-        WHERE p.project_name = $1 AND c.client_warpcast_handle = $2;
-`,
-        ['ETH Denver 2024', 'fileverse']
-    );
+    const projectData = await prisma.projects.findFirst({
+        where: {
+            project_name: 'ETH Denver 2024'
+        },
+        include: {
+            clients: true,
+            images: true,
+            team_members_projects: {
+                include: {
+                    users: {
+                        select: {
+                            user_id: true,
+                            user_name: true,
+                            user_fid: true
+                        }
+                    },
+                    roles: true
+                }
+            }
+        }
+    });
 
-// Handle the query result
-    if (res.rows.length === 0) {
+    console.log('Project Data:', JSON.stringify(projectData, null, 2));
+
+    if (!projectData) {
         throw new Error('No data returned from query');
     }
 
-    const projectData = res.rows[0];
-
-    const portfolioOwnerFid = projectData.user_fid;
-    const clientHandle = projectData.client_warpcast_handle;
+    const portfolioOwnerFid = projectData.team_members_projects[0]?.users?.user_fid;
+    const clientHandle = projectData.clients.client_warpcast_handle;
     const projectTitle = projectData.project_name;
     const projectDate = projectData.project_date;
-    const imagePaths = res.rows.map(row => row.image_path);
-    const teamMembers = res.rows.map(row => ({ handle: row.team_member_handle, role: row.team_member_role }));
+    const imagePaths = projectData.images.map(image => image.image_path);
+    const teamMembers = projectData.team_members_projects.map(member => ({
+        handle: member.users.user_name,
+        role: member.roles.role_name
+    }));
 
+    // Add null checks
+    if (!portfolioOwnerFid) {
+        throw new Error('No portfolio owner FID found');
+    }
+
+    if (!clientHandle) {
+        throw new Error('No client handle found');
+    }
 
     // Fetch Farcaster user info based on the FID and client handle
     const [portfolioOwnerInfo] = await Promise.all([
@@ -54,7 +71,6 @@ export const GET = async (request: NextRequest) => {
     const projectClient = clientHandle;
 
     console.log('Team Members Input:', teamMembers);  // Log input before fetching
-
 
     // Fetch additional team member info
     const teamMemberInfo = await fetchTeamMemberInfo(teamMembers);

@@ -7,48 +7,59 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Project {
-  id         Int      @id @default(autoincrement())
-  name       String
-  date       DateTime
-  client     Client   @relation(fields: [clientId], references: [id])
-  clientId   Int
-  images     Image[]
-  teamMembers TeamMemberProject[]
+model projects {
+  project_id            Int                     @id @default(autoincrement())
+  project_name          String
+  project_date          String
+  background_color      String?
+  website_url           String?
+  user_id               Int
+  client_id             Int
+  users                 users                   @relation(fields: [user_id], references: [user_id])
+  clients               clients                 @relation(fields: [client_id], references: [client_id])
+  images                images[]
+  team_members_projects team_members_projects[]
 }
 
-model Client {
-  id                Int      @id @default(autoincrement())
-  warpcastHandle    String
-  projects          Project[]
+model clients {
+  client_id              Int        @id @default(autoincrement())
+  client_name            String
+  client_warpcast_handle String?
+  client_x_handle        String?
+  projects               projects[]
 }
 
-model Image {
-  id        Int      @id @default(autoincrement())
-  path      String
-  project   Project  @relation(fields: [projectId], references: [id])
-  projectId Int
+model images {
+  image_id      Int      @id @default(autoincrement())
+  image_path    String
+  image_caption String? // Changed from Text? to String?
+  project_id    Int
+  projects      projects @relation(fields: [project_id], references: [project_id])
 }
 
-model User {
-  id        Int      @id @default(autoincrement())
-  fid       Int
-  name      String
-  teamMemberProjects TeamMemberProject[]
+model roles {
+  role_id               Int                     @id @default(autoincrement())
+  role_name             String
+  team_members_projects team_members_projects[]
 }
 
-model Role {
-  id        Int      @id @default(autoincrement())
-  name      String
-  teamMemberProjects TeamMemberProject[]
+model users {
+  user_id               Int                     @id @default(autoincrement())
+  user_name             String
+  user_warpcast_handle  String?
+  user_x_handle         String?
+  user_fid              Int? // Add this field
+  team_members_projects team_members_projects[]
+  projects              projects[]
 }
 
-model TeamMemberProject {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
-  project   Project  @relation(fields: [projectId], references: [id])
-  projectId Int
-  role      Role     @relation(fields: [roleId], references: [id])
-  roleId    Int
+model team_members_projects {
+  team_member_id Int
+  project_id     Int
+  role_id        Int
+  users          users    @relation(fields: [team_member_id], references: [user_id])
+  projects       projects @relation(fields: [project_id], references: [project_id])
+  roles          roles    @relation(fields: [role_id], references: [role_id])
+
+  @@id([team_member_id, project_id, role_id])
 }
