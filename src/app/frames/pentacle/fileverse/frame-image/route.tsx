@@ -15,16 +15,17 @@ export const GET = async (request: NextRequest) => {
     const backgroundColor = searchParams.get('bgcolor') || '#FDD9E8';
 
     const res = await db.query(
-        `SELECT u.user_fid, c.client_warpcast_handle, p.project_name, p.project_date, i.image_path,
-            u.user_name as team_member_handle, r.role_name as team_member_role
-     FROM projects p
-     JOIN users u ON u.user_id = p.user_id
-     JOIN clients c ON c.client_id = p.client_id
-     JOIN images i ON i.project_id = p.project_id
-     JOIN team_members_projects tmp ON tmp.project_id = p.project_id
-     JOIN users tm ON tm.user_id = tmp.team_member_id
-     JOIN roles r ON r.role_id = tmp.role_id
-     WHERE p.project_name = $1 AND c.client_warpcast_handle = $2`,
+        `SELECT tm.user_fid, c.client_warpcast_handle, p.project_name, p.project_date, i.image_path,
+       tm.user_name as team_member_handle, r.role_name as team_member_role
+FROM projects p
+JOIN users u ON u.user_id = p.user_id  -- Project owner
+JOIN clients c ON c.client_id = p.client_id
+JOIN images i ON i.project_id = p.project_id
+JOIN team_members_projects tmp ON tmp.project_id = p.project_id
+JOIN users tm ON tm.user_id = tmp.team_member_id  -- Team members
+JOIN roles r ON r.role_id = tmp.role_id
+WHERE p.project_name = $1 AND c.client_warpcast_handle = $2;
+`,
         ['ETH Denver', 'fileverse']
     );
 
@@ -33,19 +34,14 @@ export const GET = async (request: NextRequest) => {
         throw new Error('No data returned from query');
     }
 
-    const projectData = res.rows[0];  // Get the first row, or loop through if you expect multiple results
+    const projectData = res.rows[0];
 
-    console.log('Project Data:', projectData);
-
-// Now you can use projectData, for example:
     const portfolioOwnerFid = projectData.user_fid;
     const clientHandle = projectData.client_warpcast_handle;
     const projectTitle = projectData.project_name;
     const projectDate = projectData.project_date;
     const imagePaths = res.rows.map(row => row.image_path);
     const teamMembers = res.rows.map(row => ({ handle: row.team_member_handle, role: row.team_member_role }));
-
-// Rest of your code...
 
 
     // Fetch Farcaster user info based on the FID and client handle
@@ -56,6 +52,9 @@ export const GET = async (request: NextRequest) => {
 
     const farcasterHandle = `@${portfolioOwnerInfo.username}`;
     const projectClient = clientHandle;
+
+    console.log('Team Members Input:', teamMembers);  // Log input before fetching
+
 
     // Fetch additional team member info
     const teamMemberInfo = await fetchTeamMemberInfo(teamMembers);

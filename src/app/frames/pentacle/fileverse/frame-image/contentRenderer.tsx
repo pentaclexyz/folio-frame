@@ -1,20 +1,26 @@
 // contentRenderer.ts
 
-import {id} from "postcss-selector-parser";
-
 export function getContentForState(
     state: string,
     portfolioOwnerInfo: { pfp_url: string, username: string },
-    teamMemberInfo: Array<{ pfp_url: string, username: string }>,
+    teamMemberInfo: Array<{ pfp_url: string, username: string, role: string }>,
     imageIndex: number,
     farcasterHandle: string,
     projectClient: string,
-    projectTitle: string,
+    projectName: string,
     projectDate: string,
     imagePaths: string[]
 ) {
 
-    console.log({ portfolioOwnerInfo, teamMemberInfo, imagePaths, farcasterHandle, projectClient, projectTitle, projectDate });
+    console.log({
+        portfolioOwnerInfo,
+        teamMemberInfo,
+        imagePaths,
+        farcasterHandle,
+        projectClient,
+        projectName,
+        projectDate
+    });
     console.log(`http://localhost:3000/${projectClient}/${imagePaths[imageIndex]}.png`);
     console.log('Farcaster Handle:', farcasterHandle);
 
@@ -60,8 +66,7 @@ export function getContentForState(
                             fontFamily: 'factor-a-bold',
                             display: 'flex'
                         }}>
-                            {/*{farcasterHandle} folio*/}
-                            hello
+                            {farcasterHandle} folio
                         </div>
                     </div>
 
@@ -90,8 +95,7 @@ export function getContentForState(
                                 marginBottom: '10px',
                                 display: 'flex'
                             }}>
-                                {/*{projectClient}*/}
-                                client
+                                {projectClient}
                             </div>
                             <div style={{
                                 fontSize: '48px',
@@ -99,8 +103,7 @@ export function getContentForState(
                                 marginBottom: '40px',
                                 display: 'flex'
                             }}>
-                                {/*{projectTitle}*/}
-                                title
+                                {projectName}
                             </div>
 
                             <div style={{
@@ -109,7 +112,6 @@ export function getContentForState(
                                 display: 'flex'
                             }}>
                                 {/*{projectDate}*/}
-                                date
                             </div>
                         </div>
                         <div style={{
@@ -149,18 +151,30 @@ export function getContentForState(
                     <img
                         src={`${process.env.NEXT_PUBLIC_HOST}/${imagePaths[imageIndex]}.png`}
                         alt={`Image ${imageIndex + 1}`}
-                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                        style={{width: '100%', height: '100%', objectFit: 'contain'}}
                     />
 
                 ) : (
-                    <div style={{ textAlign: 'center', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{
+                        textAlign: 'center',
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
                         <p>No image available</p>
                     </div>
                 )
             );
         case 'team':
+            // Remove duplicate team members based on username
+            const uniqueTeamMembers = teamMemberInfo.filter((member, index, self) =>
+                index === self.findIndex((m) => m.username === member.username)
+            );
+
             return (
-                <div style={{
+                <div id={"team"} style={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -181,8 +195,8 @@ export function getContentForState(
                         justifyContent: 'space-between',
                         width: '900px',
                     }}>
-                        {teamMemberInfo?.length > 0 ? (
-                            teamMemberInfo.map((member, index) => (
+                        {uniqueTeamMembers.length > 0 ? (
+                            uniqueTeamMembers.map((member, index) => (
                                 <div key={index} style={{
                                     display: 'flex',
                                     alignItems: 'center',
@@ -217,6 +231,11 @@ export function getContentForState(
                                             fontSize: '32px',
                                             fontFamily: 'factor-a-bold',
                                         }}>{member.username}</p>
+                                        <p style={{
+                                            margin: 0,
+                                            fontSize: '24px',
+                                            fontFamily: 'factor-a',
+                                        }}>{member.role}</p>
                                     </div>
                                 </div>
                             ))
@@ -226,24 +245,5 @@ export function getContentForState(
                     </div>
                 </div>
             );
-        // case 'stack':
-        //     return (
-        //         <div style={{
-        //             display: 'flex',
-        //             flexDirection: 'column',
-        //             alignItems: 'center',
-        //             justifyContent: 'center',
-        //             height: '100%'
-        //         }}>
-        //             <h2 style={{ fontFamily: 'factor-a-bold' }}>Our Tech Stack</h2>
-        //             <p style={{ fontFamily: 'factor-a' }}>Details coming soon...</p>
-        //         </div>
-        //     );
-        // default:
-        //     return (
-        //         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-        //             <h1 style={{ fontFamily: 'factor-a' }}>Welcome</h1>
-        //         </div>
-        //     );
     }
 }
