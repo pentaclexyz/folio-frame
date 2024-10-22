@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "update:fids": "npx tsx src/app/scripts/updateFids.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.21.1",
