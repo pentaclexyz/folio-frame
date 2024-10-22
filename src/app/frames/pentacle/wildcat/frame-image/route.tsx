@@ -16,7 +16,7 @@ export const GET = async (request: NextRequest) => {
 
     const projectData = await prisma.projects.findFirst({
         where: {
-            project_name: 'ETH Denver 2024'
+            project_name: 'wildcat'
         },
         include: {
             clients: true,
