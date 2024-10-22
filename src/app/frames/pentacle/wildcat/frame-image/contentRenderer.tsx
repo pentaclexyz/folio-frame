@@ -10,7 +10,7 @@ export function getContentForState(
     projectName: string,
     projectDate: string,
     imagePaths: string[],
-backgroundColor: string[]
+    backgroundColor: string[]
 ) {
 
     console.log({
@@ -133,7 +133,7 @@ backgroundColor: string[]
                                 overflow: 'hidden'
                             }}>
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_HOST}/${projectName}/feature.jpg`}  // Dynamic path
+                                    src={`${process.env.NEXT_PUBLIC_HOST}/${projectName}/feature.jpg`}
                                     alt="Project Image"
                                     style={{
                                         width: '100%',
@@ -151,11 +151,10 @@ backgroundColor: string[]
             return (
                 imagePaths?.[imageIndex] ? (
                     <img
-                        src={`${process.env.NEXT_PUBLIC_HOST}/${imagePaths[imageIndex]}.png`}
+                        src={`${process.env.NEXT_PUBLIC_HOST}/${projectClient}/${imagePaths[imageIndex]}.png`}
                         alt={`Image ${imageIndex + 1}`}
-                        style={{width: '100%', height: '100%', objectFit: 'contain'}}
+                        style={{width: '100%', height: '100%', objectFit: 'cover'}}
                     />
-
                 ) : (
                     <div style={{
                         textAlign: 'center',
@@ -183,6 +182,7 @@ backgroundColor: string[]
                     justifyContent: 'center',
                     height: '100%',
                     width: '100%',
+                    backgroundColor: '#FFFEF2'
                 }}>
                     <div style={{
                         fontSize: '48px',
