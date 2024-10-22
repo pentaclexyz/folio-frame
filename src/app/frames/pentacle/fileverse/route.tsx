@@ -1,27 +1,27 @@
 import { Button } from "frames.js/next";
 import { frames } from "./frames";
 import { prisma } from '@/app/utils';
-import { fetchMetadata } from "frames.js/next";
+// import { fetchMetadata } from "frames.js/next";
 
 type FrameState = 'home' | 'images' | 'team';
 
-// Metadata generation function for the fileverse project
-export async function generateMetadata() {
-    const baseUrl = process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000';
-    const metadataUrl = new URL('/frames/pentacle/fileverse/', baseUrl); // Hardcoded for fileverse
-
-    return {
-        title: "POP – proof of project: Fileverse",
-        other: {
-            ...(await fetchMetadata(metadataUrl)),
-        },
-    };
-}
+// export async function generateMetadata() {
+//     const baseUrl = process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000';
+//     const metadataUrl = new URL('/frames/pentacle/fileverse/', baseUrl); // Hardcoded for fileverse
+//
+//     return {
+//         title: "POP – proof of project: fileverse",
+//         other: {
+//             ...(await fetchMetadata(metadataUrl)),
+//         },
+//     };
+// }
 
 const handleRequest = frames(async (ctx) => {
     const state = (ctx.searchParams.state as FrameState) || 'home';
     const imageIndex = parseInt(ctx.searchParams.imageIndex || '0', 10);
 
+    // Use the singleton Prisma client to query your database
     const projectData = await prisma.projects.findFirst({
         where: {
             project_name: 'fileverse',

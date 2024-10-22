@@ -10,7 +10,7 @@ export function getContentForState(
     projectName: string,
     projectDate: string,
     imagePaths: string[],
-    backgroundColor: string[]
+    backgroundColor: string
 ) {
 
     console.log({

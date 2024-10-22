@@ -9,20 +9,22 @@ export function getContentForState(
     projectClient: string,
     projectName: string,
     projectDate: string,
-    imagePaths: string[]
+    imagePaths: string[],
+    backgroundColor: string
 ) {
 
     console.log({
         portfolioOwnerInfo,
         teamMemberInfo,
         imagePaths,
+        backgroundColor,
         farcasterHandle,
         projectClient,
         projectName,
         projectDate
     });
-    console.log(`http://localhost:3000/${projectClient}/${imagePaths[imageIndex]}.png`);
-    console.log('Farcaster Handle:', farcasterHandle);
+    // console.log(`http://localhost:3000/${projectClient}/${imagePaths[imageIndex]}.png`);
+    // console.log('Farcaster Handle:', farcasterHandle);
 
 
     switch (state) {
@@ -111,7 +113,7 @@ export function getContentForState(
                                 fontFamily: 'factor-a',
                                 display: 'flex'
                             }}>
-                                {projectDate}
+                                {/*{projectDate}*/}
                             </div>
                         </div>
                         <div style={{
@@ -131,7 +133,7 @@ export function getContentForState(
                                 overflow: 'hidden'
                             }}>
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_HOST}/${projectName}/feature.jpg`}  // Dynamic path
+                                    src={`${process.env.NEXT_PUBLIC_HOST}/${projectName}/feature.jpg`}
                                     alt="Project Image"
                                     style={{
                                         width: '100%',
@@ -149,11 +151,10 @@ export function getContentForState(
             return (
                 imagePaths?.[imageIndex] ? (
                     <img
-                        src={`${process.env.NEXT_PUBLIC_HOST}/${imagePaths[imageIndex]}.png`}
+                        src={`${process.env.NEXT_PUBLIC_HOST}/${projectClient}/${imagePaths[imageIndex]}.png`}
                         alt={`Image ${imageIndex + 1}`}
-                        style={{width: '100%', height: '100%', objectFit: 'contain'}}
+                        style={{width: '100%', height: '100%', objectFit: 'cover'}}
                     />
-
                 ) : (
                     <div style={{
                         textAlign: 'center',
@@ -181,6 +182,7 @@ export function getContentForState(
                     justifyContent: 'center',
                     height: '100%',
                     width: '100%',
+                    backgroundColor: '#FFFEF2'
                 }}>
                     <div style={{
                         fontSize: '48px',

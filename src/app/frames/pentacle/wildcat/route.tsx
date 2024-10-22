@@ -1,22 +1,21 @@
 import { Button } from "frames.js/next";
 import { frames } from "./frames";
 import { prisma } from '@/app/utils';
-import { fetchMetadata } from "frames.js/next";
+// import { fetchMetadata } from "frames.js/next";
 
 type FrameState = 'home' | 'images' | 'team';
 
-// Metadata generation function for the wildcat project
-export async function generateMetadata() {
-    const baseUrl = process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000';
-    const metadataUrl = new URL('/frames/pentacle/wildcat/', baseUrl); // Hardcoded for wildcat
-
-    return {
-        title: "POP – proof of project: Wildcat",
-        other: {
-            ...(await fetchMetadata(metadataUrl)),
-        },
-    };
-}
+// export async function generateMetadata() {
+//     const baseUrl = process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000';
+//     const metadataUrl = new URL('/frames/pentacle/wildcat/', baseUrl); // Hardcoded for wildcat
+//
+//     return {
+//         title: "POP – proof of project: Wildcat",
+//         other: {
+//             ...(await fetchMetadata(metadataUrl)),
+//         },
+//     };
+// }
 
 const handleRequest = frames(async (ctx) => {
     const state = (ctx.searchParams.state as FrameState) || 'home';

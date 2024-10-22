@@ -10,7 +10,6 @@ export const GET = async (request: NextRequest) => {
     const searchParams = request.nextUrl.searchParams;
     const state = searchParams.get('state') || 'home';
     const imageIndex = searchParams.get('imageIndex') ? parseInt(searchParams.get('imageIndex') as string) : 0;
-    const backgroundColor = searchParams.get('bgcolor') || '#FDD9E8';
 
     const projectData = await prisma.projects.findFirst({
         where: {
@@ -58,8 +57,8 @@ export const GET = async (request: NextRequest) => {
 
     const farcasterHandle = `@${portfolioOwnerInfo.username}`;
     const projectClient = clientHandle;
-
     const teamMemberInfo = await fetchTeamMemberInfo(teamMembers);
+    const backgroundColor = projectData?.background_color || '#FFFFFF';
 
     const content = getContentForState(
         state,
@@ -70,7 +69,8 @@ export const GET = async (request: NextRequest) => {
         projectClient,
         projectTitle,
         projectDate,
-        imagePaths
+        imagePaths,
+        backgroundColor
     );
 
     const fonts = await loadFonts();

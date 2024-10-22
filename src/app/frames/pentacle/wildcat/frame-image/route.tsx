@@ -58,7 +58,7 @@ export const GET = async (request: NextRequest) => {
     const farcasterHandle = `@${portfolioOwnerInfo.username}`;
     const projectClient = clientHandle;
     const teamMemberInfo = await fetchTeamMemberInfo(teamMembers);
-    const backgroundColor = projectData?.background_color;
+    const backgroundColor = projectData?.background_color || '#FFFFFF';
 
     const content = getContentForState(
         state,
