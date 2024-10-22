@@ -23,7 +23,6 @@ export default function Page() {
             </div>
             <div className={"pr-12"}>
                 <div className={"w-96"}><img src={"images/proof-of-project-soon.svg"} alt={"pop"}/></div>
-                {/*<p className={"text-right"}>farcaster</p>*/}
             </div>
         </div>
     </main>;
