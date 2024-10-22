@@ -1,11 +1,9 @@
 import { Button } from "frames.js/next";
 import { frames } from "./frames";
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/app/utils';
 import { fetchMetadata } from "frames.js/next";
 
 type FrameState = 'home' | 'images' | 'team';
-
-const prisma = new PrismaClient();
 
 // Metadata generation function for the fileverse project
 export async function generateMetadata() {
@@ -26,7 +24,7 @@ const handleRequest = frames(async (ctx) => {
 
     const projectData = await prisma.projects.findFirst({
         where: {
-            project_name: 'ETH Denver 2024',
+            project_name: 'fileverse',
             user_id: 1
         },
         include: {
