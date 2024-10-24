@@ -1,45 +1,67 @@
 import { fetchMetadata } from "frames.js/next";
-import { prisma } from "@/app/utils"; // Assuming you have your Prisma client in utils
+import { prisma } from "@/app/utils";
+
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata({ params }: { params: { project: string } }) {
     const baseUrl = process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000';
-
     const project = params.project || 'fileverse';
 
-    const projectData = await prisma.projects.findFirst({
-        where: {
-            project_name: project  // Use the dynamically extracted project name
-        },
-        include: {
-            clients: true,
-            images: true,
-            users: true,
-            team_members_projects: {
-                include: {
-                    users: true,
-                    roles: true
+    try {
+        const projectData = await prisma.projects.findFirst({
+            where: {
+                project_name: project
+            },
+            include: {
+                clients: true,
+                images: true,
+                users: true,
+                team_members_projects: {
+                    include: {
+                        users: true,
+                        roles: true
+                    }
                 }
             }
+        });
+
+        if (!projectData || !projectData.users?.user_name) {
+            // Instead of throwing, return default metadata
+            return {
+                title: `POP – proof of project: ${project.charAt(0).toUpperCase() + project.slice(1)}`,
+                other: {
+                    // Default metadata if needed
+                    'fc:frame': 'vNext',
+                    'fc:frame:image': `${baseUrl}/api/og`,
+                },
+            };
         }
-    });
 
-    if (!projectData || !projectData.users?.user_name) {
-        throw new Error('User name not found for this project');
+        const userName = projectData.users.user_name;
+        const metadataUrl = new URL(`/frames/${userName}/${project}/`, baseUrl);
+
+        return {
+            title: `POP – proof of project: ${project.charAt(0).toUpperCase() + project.slice(1)}`,
+            other: {
+                ...(await fetchMetadata(metadataUrl)),
+            },
+        };
+    } catch (error) {
+        console.error('Error generating metadata:', error);
+        // Return default metadata instead of failing
+        return {
+            title: `POP – proof of project: ${project.charAt(0).toUpperCase() + project.slice(1)}`,
+            other: {
+                'fc:frame': 'vNext',
+                'fc:frame:image': `${baseUrl}/api/og`,
+            },
+        };
     }
-
-    const userName = projectData.users.user_name;
-    const metadataUrl = new URL(`/frames/${userName}/${project}/`, baseUrl);
-
-    return {
-        title: `POP – proof of project: ${project.charAt(0).toUpperCase() + project.slice(1)}`,
-        other: {
-            ...(await fetchMetadata(metadataUrl)),
-        },
-    };
 }
 
+// Rest of your component remains the same
 export default function Page({ params }: { params: { project: string } }) {
-    const project = params.project || 'fileverse';  // Fallback to fileverse
+    const project = params.project || 'fileverse';
 
     return (
         <main className={"bg-[#f3eeda] h-screen flex flex-col justify-between"}>
