@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { headers } from 'next/headers';
 
-// Singleton pattern for Prisma client
 let prisma: PrismaClient;
 
 if (process.env.NODE_ENV === 'production') {

@@ -34,7 +34,7 @@ const handleRequest = frames(async (ctx) => {
 
     const baseUrl = process.env.NEXT_PUBLIC_HOST;
     const userName = projectData.users.user_name;
-    
+
     const imageUrl = `${baseUrl}/frames/${userName}/${project}/frame-image?state=${state}&imageIndex=${imageIndex}`;
 
     const websiteUrl = projectData.website_url;
@@ -47,22 +47,37 @@ const handleRequest = frames(async (ctx) => {
             buttons = [
                 <Button key="images" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=images`}>Folio</Button>,
                 <Button key="team" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=team`}>Team</Button>,
-                <Button key="website" action="link" target={websiteUrl.startsWith('http') ? websiteUrl : `https://${websiteUrl}`}>View site</Button>
-
+                ...(websiteUrl ? [
+                    <Button
+                        key="website"
+                        action="link"
+                        target={websiteUrl.startsWith('http') ? websiteUrl : `https://${websiteUrl}`}
+                    >
+                        View site
+                    </Button>
+                ] : [])
             ];
             break;
         case 'images':
             buttons = [
                 <Button key="home" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=home`}>🏠</Button>,
-                <Button key="image1" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=images&imageIndex=0`}>{imageLabels[0]}</Button>,
-                <Button key="image2" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=images&imageIndex=1`}>{imageLabels[1]}</Button>,
-                <Button key="image3" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=images&imageIndex=2`}>{imageLabels[2]}</Button>,
+                <Button key="image1" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=images&imageIndex=0`}>{imageLabels[0] || 'View'}</Button>,
+                <Button key="image2" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=images&imageIndex=1`}>{imageLabels[1] || 'View'}</Button>,
+                <Button key="image3" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=images&imageIndex=2`}>{imageLabels[2] || 'View'}</Button>,
             ];
             break;
         case 'team':
             buttons = [
                 <Button key="home" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=home`}>🏠</Button>,
-                <Button key="warpcast" action="link" target={`https://warpcast.com/${warpcastHandle}`}>{warpcastHandle}</Button>
+                ...(warpcastHandle ? [
+                    <Button
+                        key="warpcast"
+                        action="link"
+                        target={`https://warpcast.com/${warpcastHandle}`}
+                    >
+                        {`@${warpcastHandle}`}
+                    </Button>
+                ] : [])
             ];
             break;
         default:
@@ -79,4 +94,3 @@ const handleRequest = frames(async (ctx) => {
 
 export const GET = handleRequest;
 export const POST = handleRequest;
-
