@@ -12,7 +12,7 @@ export const GET = async (request: NextRequest) => {
     const imageIndex = searchParams.get('imageIndex') ? parseInt(searchParams.get('imageIndex') as string) : 0;
 
     // Extract the project name from the URL (assuming the 5th part of the URL is the project name)
-    const project = request.nextUrl.pathname.split('/')[3];
+    const project = request.nextUrl.pathname.split('/')[2];
 
     if (!project) {
         throw new Error('Project name not provided in the URL');

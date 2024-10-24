@@ -1,7 +1,7 @@
 // folio-frame/src/app/scripts/updateFids.ts
 
 import { PrismaClient } from '@prisma/client'
-import { fetchFarcasterUserInfoByHandle } from '../frames/[userName]/farcasterApi'
+import { fetchFarcasterUserInfoByHandle } from '@/app/[userName]/farcasterApi'
 
 const prisma = new PrismaClient()
 

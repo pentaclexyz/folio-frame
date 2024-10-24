@@ -3,8 +3,8 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 
 export const frames = createFrames({
-    basePath: '/frames',
-    imagesRoute: '/frames/frame-image',
+    basePath: '/',
+    imagesRoute: '/frame-image',
 
     debug: process.env.NODE_ENV === "development",
 
