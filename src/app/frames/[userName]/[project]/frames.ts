@@ -1,9 +1,10 @@
 import { createFrames } from "frames.js/next";
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import { prisma } from '@/app/utils';
+import { prisma } from '@/app/utils';  // Assuming Prisma is imported for database queries
 
-export async function getBasePath(project: string) {
+// Fetch project data and derive basePath beforehand
+async function getProjectBasePath(project: string) {
     const projectData = await prisma.projects.findFirst({
         where: { project_name: project },
         include: { users: true }
@@ -17,22 +18,23 @@ export async function getBasePath(project: string) {
     return `/frames/${userName}/${project}`;
 }
 
-export async function createFrameInstance(project: string) {
-    const basePath = await getBasePath(project);
+export async function initializeFrames(project: string) {
+    const basePath = await getProjectBasePath(project);
 
     return createFrames({
-        basePath,
-        imagesRoute: `${basePath}/frame-image`,
+        basePath,  // This will now be a synchronous string
+        imagesRoute: `${basePath}/frame-image`,  // Ensure imagesRoute is also a string
         debug: process.env.NODE_ENV === "development",
+
         imageRenderingOptions: async () => {
             const factorARegularFont = fs.readFile(
                 path.join(path.resolve(process.cwd(), "public"), "FactorAMono-Regular.otf")
             );
             const factorABoldFont = fs.readFile(
-                path.join(path.resolve(process.cwd(), "public"), "FactorAMono-Bold.otf")
+                path.join(
+                    path.resolve(process.cwd(), "public"), "FactorAMono-Bold.otf")
             );
-            const [factorARegularFontData, factorABoldFontData] =
-                await Promise.all([factorARegularFont, factorABoldFont]);
+            const [factorARegularFontData, factorABoldFontData] = await Promise.all([factorARegularFont, factorABoldFont]);
             return {
                 imageOptions: {
                     fonts: [
