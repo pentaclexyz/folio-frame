@@ -3,9 +3,11 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 
 export const frames = createFrames({
-    basePath: "/frames/pentacle/fileverse",
-    imagesRoute: '/frames/pentacle/fileverse/frame-image',
+    basePath: '/',
+    imagesRoute: '/frame-image',
+
     debug: process.env.NODE_ENV === "development",
+
     imageRenderingOptions: async () => {
         const factorARegularFont = fs.readFile(
             path.join(path.resolve(process.cwd(), "public"), "FactorAMono-Regular.otf")
@@ -14,8 +16,7 @@ export const frames = createFrames({
             path.join(
                 path.resolve(process.cwd(), "public"), "FactorAMono-Bold.otf")
         );
-        const [factorARegularFontData, factorABoldFontData] =
-            await Promise.all([factorARegularFont, factorABoldFont]);
+        const [factorARegularFontData, factorABoldFontData] = await Promise.all([factorARegularFont, factorABoldFont]);
         return {
             imageOptions: {
                 fonts: [

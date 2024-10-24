@@ -3,19 +3,34 @@
 export function getContentForState(
     state: string,
     portfolioOwnerInfo: { pfp_url: string, username: string },
-    teamMemberInfo: Array<{ pfp_url: string, username: string }>,
+    teamMemberInfo: Array<{ pfp_url: string, username: string, role: string }>,
     imageIndex: number,
     farcasterHandle: string,
     projectClient: string,
-    projectTitle: string,
+    projectName: string,
     projectDate: string,
-    imagePaths: string[]
+    imagePaths: string[],
+    backgroundColor: string
 ) {
+
+    console.log({
+        portfolioOwnerInfo,
+        teamMemberInfo,
+        imagePaths,
+        backgroundColor,
+        farcasterHandle,
+        projectClient,
+        projectName,
+        projectDate
+    });
+    // console.log(`http://localhost:3000/${projectClient}/${imagePaths[imageIndex]}.png`);
+    // console.log('Farcaster Handle:', farcasterHandle);
+
 
     switch (state) {
         case 'home':
             return (
-                <div style={{
+                <div id='home' style={{
                     display: 'flex',
                     flexDirection: 'column',
                     width: '100%',
@@ -38,7 +53,8 @@ export function getContentForState(
                             display: 'flex'
                         }}>
                             <img
-                                src={portfolioOwnerInfo.pfp_url}
+                                // src={portfolioOwnerInfo.pfp_url}
+                                src="https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/7bf93ea6-db04-4ac3-3373-4795beb01b00/original"
                                 alt="Profile Picture"
                                 style={{
                                     width: '100%',
@@ -89,14 +105,15 @@ export function getContentForState(
                                 marginBottom: '40px',
                                 display: 'flex'
                             }}>
-                                {projectTitle}
+                                {projectName}
                             </div>
+
                             <div style={{
                                 fontSize: '24px',
                                 fontFamily: 'factor-a',
                                 display: 'flex'
                             }}>
-                                {projectDate}
+                                {/*{projectDate}*/}
                             </div>
                         </div>
                         <div style={{
@@ -116,7 +133,7 @@ export function getContentForState(
                                 overflow: 'hidden'
                             }}>
                                 <img
-                                    src={`${process.env.NEXT_PUBLIC_HOST}/pentacle-folio.jpg`}
+                                    src={`${process.env.NEXT_PUBLIC_HOST}/${projectName}/feature.jpg`}
                                     alt="Project Image"
                                     style={{
                                         width: '100%',
@@ -129,23 +146,43 @@ export function getContentForState(
                     </div>
                 </div>
             );
+
         case 'images':
             return (
-                <img
-                    src={`${process.env.NEXT_PUBLIC_HOST}${imagePaths[imageIndex]}`}
-                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                    alt={`Image ${imageIndex + 1}`}
-                />
+                imagePaths?.[imageIndex] ? (
+                    <img
+                        src={`${process.env.NEXT_PUBLIC_HOST}/${projectClient}/${imagePaths[imageIndex]}.png`}
+                        alt={`Image ${imageIndex + 1}`}
+                        style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                    />
+                ) : (
+                    <div style={{
+                        textAlign: 'center',
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <p>No image available</p>
+                    </div>
+                )
             );
         case 'team':
+            // Remove duplicate team members based on username
+            const uniqueTeamMembers = teamMemberInfo.filter((member, index, self) =>
+                index === self.findIndex((m) => m.username === member.username)
+            );
+
             return (
-                <div style={{
+                <div id={"team"} style={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
                     height: '100%',
                     width: '100%',
+                    backgroundColor: '#FFFEF2'
                 }}>
                     <div style={{
                         fontSize: '48px',
@@ -160,64 +197,54 @@ export function getContentForState(
                         justifyContent: 'space-between',
                         width: '900px',
                     }}>
-                        {teamMemberInfo.map((member, index) => (
-                            <div key={index} style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                width: '380px',
-                                marginBottom: '60px',
-                            }}>
-                                <div style={{
-                                    width: '80px',
-                                    height: '80px',
-                                    borderRadius: '50%',
-                                    overflow: 'hidden',
-                                    marginRight: '30px',
+                        {uniqueTeamMembers.length > 0 ? (
+                            uniqueTeamMembers.map((member, index) => (
+                                <div key={index} style={{
                                     display: 'flex',
+                                    alignItems: 'center',
+                                    width: '380px',
+                                    marginBottom: '60px',
                                 }}>
-                                    <img
-                                        src={member.pfp_url}
-                                        alt={`${member.username} profile`}
-                                        style={{
-                                            width: '100%',
-                                            height: '100%',
-                                            objectFit: 'cover'
-                                        }}
-                                    />
+                                    <div style={{
+                                        width: '80px',
+                                        height: '80px',
+                                        borderRadius: '50%',
+                                        overflow: 'hidden',
+                                        marginRight: '30px',
+                                        display: 'flex',
+                                    }}>
+                                        <img
+                                            src={member.pfp_url}
+                                            alt={`${member.username} profile`}
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'cover'
+                                            }}
+                                        />
+                                    </div>
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                    }}>
+                                        <p style={{
+                                            paddingBottom: '5px',
+                                            margin: '0',
+                                            fontSize: '32px',
+                                            fontFamily: 'factor-a-bold',
+                                        }}>{member.username}</p>
+                                        <p style={{
+                                            margin: 0,
+                                            fontSize: '24px',
+                                            fontFamily: 'factor-a',
+                                        }}>{member.role}</p>
+                                    </div>
                                 </div>
-                                <div style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                }}>
-                                    <p style={{
-                                        paddingBottom: '5px',
-                                        margin: '0',
-                                        fontSize: '32px',
-                                        fontFamily: 'factor-a-bold',
-                                    }}>{member.username}</p>
-                                </div>
-                            </div>
-                        ))}
+                            ))
+                        ) : (
+                            <p>No team members available</p>
+                        )}
                     </div>
-                </div>
-            );
-        case 'stack':
-            return (
-                <div style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    height: '100%'
-                }}>
-                    <h2 style={{ fontFamily: 'factor-a-bold' }}>Our Tech Stack</h2>
-                    <p style={{ fontFamily: 'factor-a' }}>Details coming soon...</p>
-                </div>
-            );
-        default:
-            return (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                    <h1 style={{ fontFamily: 'factor-a' }}>Welcome</h1>
                 </div>
             );
     }

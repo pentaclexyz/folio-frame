@@ -1,7 +1,6 @@
-// src/app/frames/pentacle/fileverse/frame-image/route.tsx
-
 import { NextRequest } from 'next/server';
 import { ImageResponse } from 'next/og';
+import { prisma } from '@/app/utils';
 import { fetchFarcasterUserInfoByHandle, fetchFarcasterUserInfoByFid } from '../../farcasterApi';
 import { fetchTeamMemberInfo } from '../../teamUtils';
 import { getContentForState } from './contentRenderer';
@@ -11,9 +10,53 @@ export const GET = async (request: NextRequest) => {
     const searchParams = request.nextUrl.searchParams;
     const state = searchParams.get('state') || 'home';
     const imageIndex = searchParams.get('imageIndex') ? parseInt(searchParams.get('imageIndex') as string) : 0;
-    const backgroundColor = searchParams.get('bgcolor') || '#FDD9E8';
-    const portfolioOwnerFid = 1068;
-    const clientHandle = "@fileverse";
+
+    // Extract the project name from the URL (assuming the 5th part of the URL is the project name)
+    const project = request.nextUrl.pathname.split('/')[2];
+
+    if (!project) {
+        throw new Error('Project name not provided in the URL');
+    }
+
+    // Query the project data dynamically based on the project name
+    const projectData = await prisma.projects.findFirst({
+        where: {
+            project_name: project  // Use the dynamically extracted project name
+        },
+        include: {
+            clients: true,
+            images: true,
+            team_members_projects: {
+                include: {
+                    users: true,
+                    roles: true
+                }
+            }
+        }
+    });
+
+    if (!projectData) {
+        throw new Error(`No data returned from query for project: ${project}`);
+    }
+
+    const portfolioOwnerFid = projectData?.team_members_projects[0]?.users?.user_fid;
+
+    if (!portfolioOwnerFid) {
+        throw new Error('No portfolio owner FID found');
+    }
+
+    const clientHandle = projectData?.clients?.client_warpcast_handle;
+    const projectTitle = projectData?.project_name;
+    const projectDate = projectData?.project_date;
+    const imagePaths = projectData?.images?.map(image => image.image_path) ?? [];
+    const teamMembers = projectData?.team_members_projects?.map(member => ({
+        handle: member.users?.user_name,
+        role: member.roles?.role_name
+    })) ?? [];
+
+    if (!clientHandle || !projectTitle || !projectDate) {
+        throw new Error('Missing required project data');
+    }
 
     const [portfolioOwnerInfo] = await Promise.all([
         fetchFarcasterUserInfoByFid(portfolioOwnerFid),
@@ -22,23 +65,8 @@ export const GET = async (request: NextRequest) => {
 
     const farcasterHandle = `@${portfolioOwnerInfo.username}`;
     const projectClient = clientHandle;
-    const projectTitle = "ETH Denver 2024";
-    const projectDate = "June 2024";
-
-    const teamMembers = [
-        { role: "Client", handle: "fileverse" },
-        { role: "PM", handle: "miroyato" },
-        { role: "Product design", handle: "pentacle" },
-        { role: "Dev", handle: "vijay" }
-    ];
-
-    const imagePaths = [
-        '/fileverse/folio-01.png',
-        '/fileverse/folio-02.png',
-        '/fileverse/folio-03.png',
-    ];
-
     const teamMemberInfo = await fetchTeamMemberInfo(teamMembers);
+    const backgroundColor = projectData?.background_color || '#FFFFFF';
 
     const content = getContentForState(
         state,
@@ -49,7 +77,8 @@ export const GET = async (request: NextRequest) => {
         projectClient,
         projectTitle,
         projectDate,
-        imagePaths
+        imagePaths,
+        backgroundColor
     );
 
     const fonts = await loadFonts();
