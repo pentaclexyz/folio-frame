@@ -1,10 +1,10 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-generator client {
-  provider = "prisma-client-js"
 }
 
 model projects {
@@ -15,9 +15,9 @@ model projects {
   website_url           String?
   user_id               Int
   client_id             Int
-  users                 users                   @relation(fields: [user_id], references: [user_id])
-  clients               clients                 @relation(fields: [client_id], references: [client_id])
   images                images[]
+  clients               clients                 @relation(fields: [client_id], references: [client_id])
+  users                 users                   @relation(fields: [user_id], references: [user_id])
   team_members_projects team_members_projects[]
 }
 
@@ -32,7 +32,7 @@ model clients {
 model images {
   image_id      Int      @id @default(autoincrement())
   image_path    String
-  image_caption String? // Changed from Text? to String?
+  image_caption String?
   project_id    Int
   projects      projects @relation(fields: [project_id], references: [project_id])
 }
@@ -48,18 +48,18 @@ model users {
   user_name             String
   user_warpcast_handle  String?
   user_x_handle         String?
-  user_fid              Int // Make sure this exists
-  team_members_projects team_members_projects[]
+  user_fid              Int
   projects              projects[]
+  team_members_projects team_members_projects[]
 }
 
 model team_members_projects {
   team_member_id Int
   project_id     Int
   role_id        Int
-  users          users    @relation(fields: [team_member_id], references: [user_id])
   projects       projects @relation(fields: [project_id], references: [project_id])
   roles          roles    @relation(fields: [role_id], references: [role_id])
+  users          users    @relation(fields: [team_member_id], references: [user_id])
 
   @@id([team_member_id, project_id, role_id])
 }
