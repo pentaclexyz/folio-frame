@@ -7,18 +7,24 @@ type FrameState = 'home' | 'images' | 'team';
 const handleRequest = frames(async (ctx) => {
     const state = (ctx.searchParams.state as FrameState) || 'home';
     const imageIndex = parseInt(ctx.searchParams.imageIndex || '0', 10);
-
     const project = ctx.url.pathname.split('/')[3];
 
     console.log("Extracted project:", project);
 
     const projectData = await prisma.projects.findFirst({
         where: {
-            project_name: project,
+            project_name: project  // Use the dynamically extracted project name
         },
         include: {
             clients: true,
             images: true,
+            users: true,  // Make sure to include the users relation
+            team_members_projects: {
+                include: {
+                    users: true,
+                    roles: true
+                }
+            }
         }
     });
 
@@ -27,7 +33,9 @@ const handleRequest = frames(async (ctx) => {
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_HOST;
-    const imageUrl = `${baseUrl}/frames/pentacle-02/${project}/frame-image?state=${state}&imageIndex=${imageIndex}`;
+    const userName = projectData.users.user_name;
+    
+    const imageUrl = `${baseUrl}/frames/${userName}/${project}/frame-image?state=${state}&imageIndex=${imageIndex}`;
 
     const websiteUrl = projectData.website_url;
     const warpcastHandle = projectData.clients.client_warpcast_handle;
@@ -37,29 +45,29 @@ const handleRequest = frames(async (ctx) => {
     switch (state) {
         case 'home':
             buttons = [
-                <Button key="images" action="post" target={`${baseUrl}/frames/pentacle-02/${project}?state=images`}>Folio</Button>,
-                <Button key="team" action="post" target={`${baseUrl}/frames/pentacle-02/${project}?state=team`}>Team</Button>,
+                <Button key="images" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=images`}>Folio</Button>,
+                <Button key="team" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=team`}>Team</Button>,
                 <Button key="website" action="link" target={websiteUrl.startsWith('http') ? websiteUrl : `https://${websiteUrl}`}>View site</Button>
 
             ];
             break;
         case 'images':
             buttons = [
-                <Button key="home" action="post" target={`${baseUrl}/frames/pentacle-02/${project}?state=home`}>🏠</Button>,
-                <Button key="image1" action="post" target={`${baseUrl}/frames/pentacle-02/${project}?state=images&imageIndex=0`}>{imageLabels[0]}</Button>,
-                <Button key="image2" action="post" target={`${baseUrl}/frames/pentacle-02/${project}?state=images&imageIndex=1`}>{imageLabels[1]}</Button>,
-                <Button key="image3" action="post" target={`${baseUrl}/frames/pentacle-02/${project}?state=images&imageIndex=2`}>{imageLabels[2]}</Button>,
+                <Button key="home" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=home`}>🏠</Button>,
+                <Button key="image1" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=images&imageIndex=0`}>{imageLabels[0]}</Button>,
+                <Button key="image2" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=images&imageIndex=1`}>{imageLabels[1]}</Button>,
+                <Button key="image3" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=images&imageIndex=2`}>{imageLabels[2]}</Button>,
             ];
             break;
         case 'team':
             buttons = [
-                <Button key="home" action="post" target={`${baseUrl}/frames/pentacle-02/${project}?state=home`}>🏠</Button>,
+                <Button key="home" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=home`}>🏠</Button>,
                 <Button key="warpcast" action="link" target={`https://warpcast.com/${warpcastHandle}`}>{warpcastHandle}</Button>
             ];
             break;
         default:
             buttons = [
-                <Button key="home" action="post" target={`${baseUrl}/frames/pentacle-02/${project}?state=home`}>🏠</Button>
+                <Button key="home" action="post" target={`${baseUrl}/frames/${userName}/${project}?state=home`}>🏠</Button>
             ];
     }
 
