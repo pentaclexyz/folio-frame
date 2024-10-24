@@ -39,7 +39,8 @@ const handleRequest = frames(async (ctx) => {
             buttons = [
                 <Button key="images" action="post" target={`${baseUrl}/frames/pentacle-02/${project}?state=images`}>Folio</Button>,
                 <Button key="team" action="post" target={`${baseUrl}/frames/pentacle-02/${project}?state=team`}>Team</Button>,
-                <Button key="website" action="link" target={`https://${websiteUrl}`}>View site</Button>
+                <Button key="website" action="link" target={websiteUrl.startsWith('http') ? websiteUrl : `https://${websiteUrl}`}>View site</Button>
+
             ];
             break;
         case 'images':
