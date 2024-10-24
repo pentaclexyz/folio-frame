@@ -1,26 +1,24 @@
 import { PrismaClient } from '@prisma/client';
 import { headers } from 'next/headers';
 
-// Singleton pattern for Prisma client
-let prisma: PrismaClient;
+const globalForPrisma = global as unknown as {
+    prisma: PrismaClient | undefined;
+};
 
-if (process.env.NODE_ENV === 'production') {
-    prisma = new PrismaClient();
-} else {
-    if (!global.prisma) {
-        global.prisma = new PrismaClient();
-    }
-    prisma = global.prisma;
+// Singleton pattern for Prisma client
+const prisma = globalForPrisma.prisma ?? new PrismaClient();
+
+if (process.env.NODE_ENV !== 'production') {
+    globalForPrisma.prisma = prisma;
 }
 
 export { prisma };
 
 // Utility functions
-
 export function currentURL(pathname: string): URL {
     try {
         const headersList = headers();
-        const host = headersList.get('x-forwarded-host') || headersList.get('host');
+        const host = headersList.get('x-forwarded-host') || 'localhost';
         const protocol = headersList.get('x-forwarded-proto') || 'http';
 
         return new URL(pathname, `${protocol}://${host}`);
@@ -41,7 +39,7 @@ export function appURL() {
 }
 
 export function vercelURL() {
-    return process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined;
+    return process.env.NEXT_PUBLIC_HOST ? `https://${process.env.NEXT_PUBLIC_HOST}` : undefined;
 }
 
 export function createExampleURL(path: string) {
