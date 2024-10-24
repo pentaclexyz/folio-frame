@@ -4,39 +4,26 @@ import { prisma } from '@/app/utils';
 
 type FrameState = 'home' | 'images' | 'team';
 
-// export async function generateMetadata() {
-//     const baseUrl = process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000';
-//     const metadataUrl = new URL('/frames/pentacle-02/wildcat/', baseUrl); // Hardcoded for wildcat
-//
-//     return {
-//         title: "POP – proof of project: Wildcat",
-//         other: {
-//             ...(await fetchMetadata(metadataUrl)),
-//         },
-//     };
-// }
-
 const handleRequest = frames(async (ctx) => {
     const state = (ctx.searchParams.state as FrameState) || 'home';
     const imageIndex = parseInt(ctx.searchParams.imageIndex || '0', 10);
 
-    const project = ctx.request.url.split('/')[5];
+    const project = ctx.url.pathname.split('/')[3];
 
-    console.log(project)
+    console.log("Extracted project:", project);
 
     const projectData = await prisma.projects.findFirst({
         where: {
             project_name: project,
-            user_id: 1
         },
         include: {
             clients: true,
-            images: true
+            images: true,
         }
     });
 
     if (!projectData) {
-        throw new Error('Project not found');
+        throw new Error(`Project not found: ${project}`);
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_HOST;
@@ -83,3 +70,4 @@ const handleRequest = frames(async (ctx) => {
 
 export const GET = handleRequest;
 export const POST = handleRequest;
+

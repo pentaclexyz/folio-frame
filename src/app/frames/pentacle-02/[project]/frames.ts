@@ -3,8 +3,8 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 
 export const frames = createFrames({
-    basePath: "/frames/pentacle/wildcat",
-    imagesRoute: '/frames/pentacle/wildcat/frame-image',
+    basePath: "/frames/pentacle-02/wildcat",
+    imagesRoute: '/frames/pentacle-02/wildcat/frame-image',
     debug: process.env.NODE_ENV === "development",
     imageRenderingOptions: async () => {
         const factorARegularFont = fs.readFile(

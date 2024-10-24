@@ -6,7 +6,7 @@ export async function generateMetadata({ params }: { params: { project: string }
 
     // Dynamically use the project name from the URL parameters
     const project = params.project || 'fileverse';  // Fallback to fileverse if project isn't specified
-    const metadataUrl = new URL(`/frames/pentacle/${project}/`, baseUrl);
+    const metadataUrl = new URL(`/frames/pentacle-02/${project}/`, baseUrl);
 
     return {
         title: `POP – proof of project: ${project.charAt(0).toUpperCase() + project.slice(1)}`,
