@@ -18,7 +18,7 @@ const handleRequest = frames(async (ctx) => {
         include: {
             clients: true,
             images: true,
-            users: true,  // Make sure to include the users relation
+            users: true,
             team_members_projects: {
                 include: {
                     users: true,
